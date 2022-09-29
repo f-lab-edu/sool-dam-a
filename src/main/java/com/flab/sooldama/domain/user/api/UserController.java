@@ -8,7 +8,7 @@ public class UserController {
 
     // Todo: 삭제 예정 (테스트 전용입니다.)
     @GetMapping("/")
-    public String Index() {
+    public String index() {
         return "hello world";
     }
 }
