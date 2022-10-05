@@ -2,6 +2,7 @@ plugins {
 	id 'org.springframework.boot' version '2.7.4'
 	id 'io.spring.dependency-management' version '1.0.14.RELEASE'
 	id 'java'
+	id 'jacoco'
 }
 
 group = 'com.flab'
@@ -12,6 +13,10 @@ repositories {
 	mavenCentral()
 }
 
+jacoco {
+	toolVersion = "0.8.8"
+}
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 //	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2'
@@ -20,4 +25,35 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+jacocoTestReport {
+	dependsOn test
+
+	reports {
+		xml.required = false
+		csv.required = false
+		html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
+	}
+
+	finalizedBy jacocoTestCoverageVerification
+}
+
+test {
+	finalizedBy jacocoTestReport
+}
+
+jacocoTestCoverageVerification {
+	violationRules {
+		rule {
+			enabled = true; // true 로 설정하면 포함된 작업에 대한 데이터가 수집됩니다.
+			element = 'CLASS' // 룰을 체크할 단위는 클래스 단위
+
+			limit { // rule 에 대한 제한을 설정합니다.
+				counter = 'METHOD'
+				value = 'COVEREDRATIO'
+				minimum = 0.7
+			}
+		}
+	}
 }
