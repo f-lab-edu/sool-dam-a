@@ -53,6 +53,10 @@ jacocoTestCoverageVerification {
 		rule {
 			enabled = true; // true 로 설정하면 포함된 작업에 대한 데이터가 수집됩니다.
 			element = 'CLASS' // 룰을 체크할 단위는 클래스 단위
+			excludes = [
+				'com.flab.sooldama.domain.**.dto.*',
+				'com.flab.sooldama.domain.**.domain.*'
+			]
 
 			limit { // rule 에 대한 제한을 설정합니다.
 				counter = 'METHOD'
