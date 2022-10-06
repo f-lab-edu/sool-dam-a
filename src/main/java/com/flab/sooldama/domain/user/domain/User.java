@@ -1,5 +1,20 @@
 package com.flab.sooldama.domain.user.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
 public class User {
-    //Todo: User 객체 생성
+
+    private Long id;
+    private String email;
+    private String password;
+    private String name;
+    private String phoneNumber;
+    private String nickname;
+    private boolean isAdult;
+    private String createdAt;
+    private String updatedAt;
+    private String deletedAt;
 }
