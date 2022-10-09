@@ -13,4 +13,9 @@ class SoolDamAApplicationTests {
      */
     @Test
     void contextLoads() {}
+
+    @Test
+    public void main() {
+        SoolDamAApplication.main(new String[] {});
+    }
 }
