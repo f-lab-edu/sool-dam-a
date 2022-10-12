@@ -1,6 +1,7 @@
 package com.flab.sooldama.domain.user.api;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.DisplayName;
@@ -18,7 +19,16 @@ public class ProductApiTest {
 
     @Test
     @DisplayName("상품 조회 성공 테스트")
-    public void getProducts() throws Exception {
+    public void getProductsTest() throws Exception {
         this.mockMvc.perform(get("/products")).andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("offset이 0 이하일 때 상품 조회 실패")
+    public void getProductsFailTest() throws Exception {
+        this.mockMvc
+                .perform(get("/products?offset=-1"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.data").value("offset이 0 이상이어야 합니다"));
     }
 }
