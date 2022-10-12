@@ -1,4 +1,4 @@
-package com.flab.sooldama.global.Response;
+package com.flab.sooldama.global.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,5 +12,9 @@ public class BasicResponse<T> {
 
     public static <T> BasicResponse<T> success(T data) {
         return new BasicResponse<>(true, data);
+    }
+
+    public static <T> BasicResponse<T> fail(T data) {
+        return new BasicResponse<>(false, data);
     }
 }
