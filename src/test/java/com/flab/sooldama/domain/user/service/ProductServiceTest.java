@@ -19,6 +19,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class ProductServiceTest {
 
+    /*
+    @InjectMocks, @Mock 어노테이션
+    @Mock 으로 mock 객체를 생성하여, @InjectMocks 가 붙은 객체에 주입시킵니다.
+    @InjectMocks(Service) @Mock(DAO) 를 활용하여 Service 테스트 목객체에 DAO 목객체를 주입시킵니다.
+     */
     @InjectMocks ProductService productService;
     @Mock private ProductMapper productMapper;
 

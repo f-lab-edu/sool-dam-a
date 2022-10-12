@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProductApi {
     private final ProductService productService;
 
+    /*
+    @RequestParam 어노테이션은 쿼리스트링을 파라미터로 받을 수 있게 도와줍니다.
+     */
     @GetMapping("")
     public ResponseEntity<BasicResponse<ProductsResponse>> getProducts(
             @RequestParam(defaultValue = "0") Integer offset,
