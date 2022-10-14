@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /*
 @RestController 어노테이션은 @Controller 와 @ResponseBody 가 결합된 어노테이션으로, 컨트롤러 클래스 하위 메서드에
-@ResponseBody 를 붙히지 않아도 문자열과 JSON 등을 전송할 수 있게 해줍니다.
+@ResponseBody 를 붙이지 않아도 문자열과 JSON 등을 전송할 수 있게 해줍니다.
  */
 @RestController
 @RequiredArgsConstructor
