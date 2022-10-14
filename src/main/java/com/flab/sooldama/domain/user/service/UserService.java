@@ -1,6 +1,7 @@
 package com.flab.sooldama.domain.user.service;
 
 import com.flab.sooldama.domain.user.dao.UserMapper;
+import com.flab.sooldama.domain.user.dto.request.JoinUserRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -8,7 +9,10 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor // final 이 붙거나 @NotNull 이 붙은 필드의 생성자를 자동 생성해주는 롬복 어노테이션입니다.
 public class UserService {
+
     private final UserMapper userMapper;
 
-    //ToDo : 이 곳에 서비스 로직 입력
+    public void insertUser(JoinUserRequest request) {
+        userMapper.insertUser(request.toUser());
+    }
 }
