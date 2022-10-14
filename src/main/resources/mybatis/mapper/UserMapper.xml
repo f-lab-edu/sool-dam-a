@@ -11,7 +11,7 @@
     사용하도록 설정한다. 기본값은 false이고, insert, update에만 적용된다. -->
     <!-- keyProperty: getGeneratedKeys에 의해 리턴된 키를 세팅할 프로퍼티를 지정한다. -->
     INSERT INTO user
-    (id, email, password, name, phoneNumber, nickname, isAdult, createdAt, updatedAt, deletedAt)
+    (id, email, password, name, phone_number, nickname, is_adult, created_at, updated_at, deleted_at)
     VALUES
     (#{id}, #{email}, #{password}, #{name}, #{phoneNumber}, #{nickname}, #{isAdult}, #{createdAt},
     #{updatedAt}, #{deletedAt})
