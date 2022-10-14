@@ -1,7 +1,9 @@
 package com.flab.sooldama.domain.user.service;
 
 import com.flab.sooldama.domain.user.dao.UserMapper;
+import com.flab.sooldama.domain.user.domain.User;
 import com.flab.sooldama.domain.user.dto.request.JoinUserRequest;
+import com.flab.sooldama.domain.user.dto.response.JoinUserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,5 +16,10 @@ public class UserService {
 
     public void insertUser(JoinUserRequest request) {
         userMapper.insertUser(request.toUser());
+    }
+
+    public JoinUserResponse findUserById(Long id) {
+        User matchedUser = userMapper.findUserById(id);
+        return JoinUserResponse.getResponse(matchedUser);
     }
 }
