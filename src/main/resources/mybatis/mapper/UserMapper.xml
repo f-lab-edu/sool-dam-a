@@ -17,4 +17,8 @@
     #{updatedAt}, #{deletedAt})
   </insert>
 
+  <select id="findUserById" parameterType="Long" resultType="com.flab.sooldama.domain.user.domain.User">
+    SELECT * FROM user WHERE ID = #{id}
+  </select>
+
 </mapper>
