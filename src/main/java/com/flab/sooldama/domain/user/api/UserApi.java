@@ -1,8 +1,14 @@
 package com.flab.sooldama.domain.user.api;
 
+import com.flab.sooldama.domain.user.dto.request.JoinUserRequest;
+import com.flab.sooldama.domain.user.dto.response.JoinUserResponse;
 import com.flab.sooldama.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 /*
@@ -24,5 +30,16 @@ public class UserApi {
         return "hello world";
     }
 
-    // Todo: 이 곳에 컨트롤러 로직 입력
+    /*
+    @PostMapping 어노테이션은 HTTP POST 요청을 처리하는 메서드를 매핑하는 어노테이션입니다.
+    Url에 따라서 어떤 정보를 서버에 저장할지 결정합니다.
+     */
+    @ResponseBody
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/join")
+    public JoinUserResponse joinUser(JoinUserRequest request) {
+        userService.insertUser(request);
+        JoinUserResponse response = new JoinUserResponse();
+        return response;
+    }
 }
