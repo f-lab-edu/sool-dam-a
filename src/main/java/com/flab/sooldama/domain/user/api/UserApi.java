@@ -39,7 +39,7 @@ public class UserApi {
     @PostMapping("/join")
     public JoinUserResponse joinUser(JoinUserRequest request) {
         userService.insertUser(request);
-        JoinUserResponse response = new JoinUserResponse();
+        JoinUserResponse response = userService.findUserById(request.getId());
         return response;
     }
 }
