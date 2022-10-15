@@ -38,4 +38,16 @@ class UserServiceTest {
         Assertions.assertThat(joinedUser.getId()).isEqualTo(1L);
     }
 
+    @Test
+    @DisplayName("없는 아이디로 사용자를 조회")
+    public void findUserWithNonExistingId() {
+       // 없는 아이디를 만든다
+       Long wrongId = -1L;
+
+       // service에 없는 아이디에 대한 회원 정보를 요청
+        JoinUserResponse wrongResponse = userService.findUserById(wrongId);
+
+        // 오류 발생
+        Assertions.assertThat(wrongResponse.getUser()).isNull();
+    }
 }
