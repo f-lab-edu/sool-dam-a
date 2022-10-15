@@ -6,6 +6,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/*
+ * @NoArgsConstructor 어노테이션은 파라미터가 없는 생성자를 만들어줍니다.
+ * @AllArgsConstructor 어노테이션은 이 어노테이션이 붙은 클래스 안 모든 필드를 파라미터로 하는 생성자를 만들어줍니다.
+ */
 @Getter
 @Builder
 @NoArgsConstructor
