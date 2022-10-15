@@ -1,12 +1,12 @@
 package com.flab.sooldama.domain.user.api;
 
 import com.flab.sooldama.domain.user.dto.request.JoinUserRequest;
-import com.flab.sooldama.domain.user.dto.response.JoinUserResponse;
 import com.flab.sooldama.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,9 +35,7 @@ public class UserApi {
      */
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/join")
-    public JoinUserResponse joinUser(JoinUserRequest request) {
+    public void joinUser(@RequestBody JoinUserRequest request) {
         userService.insertUser(request);
-        JoinUserResponse response = userService.findUserById(request.getId());
-        return response;
     }
 }
