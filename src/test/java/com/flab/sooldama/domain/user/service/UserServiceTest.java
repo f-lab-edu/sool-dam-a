@@ -2,7 +2,7 @@ package com.flab.sooldama.domain.user.service;
 
 import com.flab.sooldama.domain.user.dto.request.JoinUserRequest;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,13 +13,9 @@ class UserServiceTest {
     @Autowired
     private UserService userService;
 
-   @BeforeEach
-   public void setUp() {
-
-   }
-
     @Test
-    public void 사용자가_회원가입하면_DB에_회원정보가_추가되나() {
+    @DisplayName("사용자가 회원가입하면 DB에 회원정보가 추가되나")
+    public void userInfoAddedOnDB() {
         // 회원가입할 사용자 객체 생성
         JoinUserRequest request1 = JoinUserRequest.builder()
                 .id(1L)
