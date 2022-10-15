@@ -1,6 +1,8 @@
 package com.flab.sooldama.domain.user.service;
 
+import com.flab.sooldama.domain.user.domain.User;
 import com.flab.sooldama.domain.user.dto.request.JoinUserRequest;
+import com.flab.sooldama.domain.user.dto.response.JoinUserResponse;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,8 +34,8 @@ class UserServiceTest {
         userService.insertUser(request1);
 
         // DB에 가입한 회원 정보가 있는지 확인
-        Assertions.assertThat(userService.findUserById(request1.getId()).getUser().getId())
-                .isEqualTo(1L);
+        User joinedUser = userService.findUserById(request1.getId()).getUser();
+        Assertions.assertThat(joinedUser.getId()).isEqualTo(1L);
     }
 
 }
