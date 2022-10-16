@@ -1,4 +1,4 @@
-package com.flab.sooldama.domain.user.api;
+package com.flab.sooldama.domain.product.api;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;

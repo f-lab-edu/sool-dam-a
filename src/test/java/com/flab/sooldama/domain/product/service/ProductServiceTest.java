@@ -1,4 +1,4 @@
-package com.flab.sooldama.domain.user.service;
+package com.flab.sooldama.domain.product.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
