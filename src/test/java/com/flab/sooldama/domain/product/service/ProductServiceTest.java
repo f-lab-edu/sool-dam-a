@@ -44,7 +44,7 @@ public class ProductServiceTest {
                             .price(1000)
                             .imageUrl("test")
                             .description("test")
-                            .adv(1.0)
+                            .abv(1.0)
                             .capacity(350)
                             .build());
         }

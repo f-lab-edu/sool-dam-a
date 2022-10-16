@@ -15,7 +15,7 @@ public class Product {
     private Integer price;
     private String imageUrl;
     private String description;
-    private Double adv;
+    private Double abv;
     private Integer capacity;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
