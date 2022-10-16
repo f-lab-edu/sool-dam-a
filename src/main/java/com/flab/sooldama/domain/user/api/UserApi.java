@@ -41,7 +41,11 @@ public class UserApi {
      */
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/join")
-    public void joinUser(@RequestBody JoinUserRequest request) {
+    public void joinUser(@RequestBody JoinUserRequest request) throws Exception {
+        if (request.getEmail() == null || request.getPassword() == null
+        || request.getName() == null || request.getPhoneNumber() == null) {
+            throw new Exception("필수 정보 누락");
+        }
         userService.insertUser(request);
     }
 }
