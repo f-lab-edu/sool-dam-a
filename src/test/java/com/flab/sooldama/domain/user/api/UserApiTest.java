@@ -12,8 +12,8 @@ import com.flab.sooldama.domain.user.service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.util.NestedServletException;
@@ -24,8 +24,15 @@ import org.springframework.web.util.NestedServletException;
  * Autowired 는 스프링 DI 에서 사용되는 어노테이션입니다.
  * 스프링에서 빈 인스턴스가 생성된 이후 자동으로 인스턴스를 주입하기 위해 사용합니다.
  */
-@SpringBootTest
-@AutoConfigureMockMvc
+
+/*
+ * @WebMvcTest 어노테이션은 MVC 와 관련된 요소만을 테스트할 수 있도록 도와줍니다. @SpringBootTest 어노테이션을 사용하면
+ * Service 의존성도 가져오므로 독립적인 Controller 단위 테스트를 할 수 없습니다. 반면 @WebMvcTest 어노테이션을 사용하면
+ * Service 의존성을 모의 객체로 대신할 수 있어 독립적인 Controller 단위 테스트를 할 수 있습니다.
+ * @MockBean 어노테이션은 @WebMvcTest 가 붙은 테스트 클래스에서 모의 객체로 사용할 요소에 붙입니다. 그러면 이 모의 객체가
+ * 의존성으로 설정됩니다.
+ */
+@WebMvcTest
 public class UserApiTest {
 
     @Autowired
@@ -33,6 +40,7 @@ public class UserApiTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @MockBean
     private UserService userService;
 
     @Test
