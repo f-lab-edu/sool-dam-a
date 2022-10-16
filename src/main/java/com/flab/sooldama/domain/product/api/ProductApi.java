@@ -5,7 +5,6 @@ import com.flab.sooldama.domain.product.service.ProductService;
 import com.flab.sooldama.global.response.BasicResponse;
 import javax.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +27,6 @@ public class ProductApi {
             @RequestParam(defaultValue = "0") @Min(0) Integer offset,
             @RequestParam(defaultValue = "20") Integer limit) {
         ProductsResponse productsResponse = productService.getProducts(offset, limit);
-        return ResponseEntity.status(HttpStatus.OK).body(BasicResponse.success(productsResponse));
+        return ResponseEntity.ok().body(BasicResponse.success(productsResponse));
     }
 }
