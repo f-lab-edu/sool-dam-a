@@ -28,7 +28,6 @@ public class ProductApiTest {
     public void getProductsFailTest() throws Exception {
         this.mockMvc
                 .perform(get("/products?offset=-1"))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.data").value("offset이 0 이상이어야 합니다"));
+                .andExpect(status().isBadRequest());
     }
 }
