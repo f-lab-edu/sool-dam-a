@@ -20,7 +20,9 @@ public class ProductApiTest {
     @Test
     @DisplayName("상품 조회 성공 테스트")
     public void getProductsTest() throws Exception {
-        this.mockMvc.perform(get("/products")).andExpect(status().isOk());
+        this.mockMvc
+                .perform(get("/products"))
+                .andExpect(status().isOk());
     }
 
     @Test
