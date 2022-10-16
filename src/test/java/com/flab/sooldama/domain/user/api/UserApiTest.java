@@ -84,7 +84,7 @@ public class UserApiTest {
                         .name("younghee lee")
                         .build());
         //Then 회원가입 api에 content를 넣고 호출했을 때
-        assertThrows(NestedServletException.class, () -> mockMvc.perform(post("/join")
+        assertThrows(Exception.class, () -> mockMvc.perform(post("/join")
                         .content(content)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
