@@ -8,7 +8,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 public class ProductMapperTest {
@@ -17,7 +16,7 @@ public class ProductMapperTest {
 
     @Test
     @DisplayName("전체 제품 조회 테스트")
-    public void productSelectTest() {
+    public void selectProductsTest() {
 
         List<Product> products = productMapper.selectProducts(0, 1);
 
@@ -27,5 +26,15 @@ public class ProductMapperTest {
         assertEquals("연꽃이 들어간 살균 막걸리", products.get(0).getDescription());
         assertEquals(7.0, products.get(0).getAbv());
         assertEquals(375, products.get(0).getCapacity());
+    }
+
+    @Test
+    @DisplayName("카테고리별 제품 조회 테스트")
+    public void selectProductsByCategoryIdTest() {
+        List<Product> products = productMapper.selectProductsByCategoryId(0, 1, 1);
+
+        for (Product product: products) {
+            assertEquals(1L, product.getProductCategoryId());
+        }
     }
 }
