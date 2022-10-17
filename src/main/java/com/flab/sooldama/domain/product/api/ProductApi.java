@@ -34,7 +34,7 @@ public class ProductApi {
     public ResponseEntity<ProductsResponse> getProducts(
             @RequestParam(defaultValue = "0") @Min(0) Integer offset,
             @RequestParam(defaultValue = "20") Integer limit,
-            @RequestParam(required = false) Integer categoryId) {
+            @RequestParam(required = false) Long categoryId) {
 
         ProductsResponse productsResponse =
                 (categoryId == null)

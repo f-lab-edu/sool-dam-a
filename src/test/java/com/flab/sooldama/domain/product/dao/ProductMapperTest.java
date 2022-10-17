@@ -31,7 +31,7 @@ public class ProductMapperTest {
     @Test
     @DisplayName("카테고리별 제품 조회 테스트")
     public void selectProductsByCategoryIdTest() {
-        List<Product> products = productMapper.selectProductsByCategoryId(0, 1, 1);
+        List<Product> products = productMapper.selectProductsByCategoryId(0, 1, 1L);
 
         for (Product product: products) {
             assertEquals(1L, product.getProductCategoryId());
