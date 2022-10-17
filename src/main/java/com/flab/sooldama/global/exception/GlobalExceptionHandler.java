@@ -17,7 +17,7 @@ slf4j를 의존하는 클라이언트 코드에서는 실제 구현을 몰라도
 @ControllerAdvice 어노테이션은 컨트롤러에서 쓰이는 공통 기능들을 모듈화하여 전역적으로 쓰게 도와줍니다.
 @ExceptionHandler 어노테이션은 @Controller Bean내에서 발생하는 특정 예외에 대한 전역적인 예외 처리를 할 수 있게 합니다.
 동작 과정은 다음과 같습니다.
-1. 디스패처 서블릿이 에러르 catch 합니다.
+1. 디스패처 서블릿이 에러를 catch르 합니다.
 2. 디스 패처 서블릿은 다양한 예외 처리기를 가지고 있고, 해당 에러를 처리할 수 있는 HandlerExceptionResolver가 에러를 처리합니다.
 3. 전역적인 ControllerAdvice가 처리할 지, 지역적인 Controller 에서 처리할지 검사합니다.
 4. ControllerAdvice의 ExceptionHandler로 처리가 가능한지 검사합니다.
