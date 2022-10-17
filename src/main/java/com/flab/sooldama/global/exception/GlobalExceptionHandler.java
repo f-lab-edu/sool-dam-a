@@ -1,6 +1,6 @@
 package com.flab.sooldama.global.exception;
 
-import com.flab.sooldama.global.response.BasicResponse;
+import com.flab.sooldama.global.response.FailResponse;
 import javax.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -30,10 +30,10 @@ ExceptionHandler의 구현 메소드를 호출해 처리한 에러를 반환하�
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<BasicResponse<String>> constraintViolationException(
+    public ResponseEntity<FailResponse<String>> constraintViolationException(
             ConstraintViolationException e) {
         log.error(e.getMessage(), e);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(BasicResponse.fail(e.getMessage()));
+                .body(FailResponse.fail(e.getMessage()));
     }
 }
