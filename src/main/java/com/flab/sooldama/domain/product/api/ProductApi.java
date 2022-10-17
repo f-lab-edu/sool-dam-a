@@ -33,8 +33,14 @@ public class ProductApi {
     @GetMapping("")
     public ResponseEntity<ProductsResponse> getProducts(
             @RequestParam(defaultValue = "0") @Min(0) Integer offset,
-            @RequestParam(defaultValue = "20") Integer limit) {
-        ProductsResponse productsResponse = productService.getProducts(offset, limit);
+            @RequestParam(defaultValue = "20") Integer limit,
+            @RequestParam(required = false) Integer categoryId) {
+
+        ProductsResponse productsResponse =
+                (categoryId == null)
+                        ? productService.getProducts(offset, limit)
+                        : productService.getProductsByCategoryId(offset, limit, categoryId);
+
         return ResponseEntity.ok().body(productsResponse);
     }
 }

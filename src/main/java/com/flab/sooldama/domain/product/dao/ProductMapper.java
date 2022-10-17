@@ -7,5 +7,11 @@ import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface ProductMapper {
+
     List<Product> selectProducts(@Param("offset") Integer offset, @Param("limit") Integer limit);
+
+    List<Product> selectProductsByCategoryId(
+            @Param("offset") Integer offset,
+            @Param("limit") Integer limit,
+            @Param("categoryId") Integer categoryId);
 }

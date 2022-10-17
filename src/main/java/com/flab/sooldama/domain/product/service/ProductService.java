@@ -16,4 +16,8 @@ public class ProductService {
         List<Product> products = productMapper.selectProducts(offset, limit);
         return ProductsResponse.from(products);
     }
+    public ProductsResponse getProductsByCategoryId(Integer offset, Integer limit, Integer categoryId) {
+        List<Product> products = productMapper.selectProductsByCategoryId(offset, limit, categoryId);
+        return ProductsResponse.from(products);
+    }
 }
