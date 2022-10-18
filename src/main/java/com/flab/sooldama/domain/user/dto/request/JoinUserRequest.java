@@ -1,6 +1,7 @@
 package com.flab.sooldama.domain.user.dto.request;
 
 import com.flab.sooldama.domain.user.domain.User;
+import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,13 +16,21 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class JoinUserRequest {
+
+    @NotNull
     private Long id;
+    @NotNull
     private String email;
+    @NotNull
     private String password;
+    @NotNull
     private String name;
+    @NotNull
     private String phoneNumber;
     private String nickname;
+    @NotNull
     private boolean isAdult;
+    @NotNull
     private String createdAt;
     private String updatedAt;
     private String deletedAt;
