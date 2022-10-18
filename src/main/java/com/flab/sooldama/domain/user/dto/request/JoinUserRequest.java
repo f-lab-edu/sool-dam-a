@@ -28,7 +28,6 @@ public class JoinUserRequest {
 
     public User toUser() {
         return User.builder()
-                .id(this.getId())
                 .email(this.getEmail())
                 .password(this.getPassword())
                 .name(this.getName())
