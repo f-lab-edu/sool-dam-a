@@ -29,11 +29,15 @@ ExceptionHandler의 구현 메소드를 호출해 처리한 에러를 반환하�
 @Slf4j
 public class GlobalExceptionHandler {
 
+    private String getSimpleName(Exception e) {
+        return e.getClass().getSimpleName();
+    }
+
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<FailResponse<String>> constraintViolationException(
+    public ResponseEntity<FailResponse> constraintViolationException(
             ConstraintViolationException e) {
         log.error(e.getMessage(), e);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(FailResponse.fail(e.getMessage()));
+                .body(FailResponse.fail(getSimpleName(e), e.getMessage()));
     }
 }

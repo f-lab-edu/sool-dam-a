@@ -5,10 +5,12 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class FailResponse<T> {
+public class FailResponse {
 
-    private T message;
-    public static <T> FailResponse<T> fail(T message) {
-        return new FailResponse<>(message);
+    private String exception;
+    private String message;
+
+    public static FailResponse fail(String exception, String message) {
+        return new FailResponse(exception, message);
     }
 }
