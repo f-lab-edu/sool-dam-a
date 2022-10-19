@@ -44,7 +44,6 @@ public class JoinUserRequest {
                 .phoneNumber(this.getPhoneNumber())
                 .nickname(this.getNickname())
                 .isAdult(this.isAdult())
-                .createdAt(this.getCreatedAt())
                 .updatedAt(this.getUpdatedAt())
                 .deletedAt(this.getDeletedAt())
                 .build();
