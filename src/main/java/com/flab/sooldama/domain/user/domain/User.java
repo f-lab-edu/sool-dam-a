@@ -1,5 +1,6 @@
 package com.flab.sooldama.domain.user.domain;
 
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,7 +17,7 @@ public class User {
     private String phoneNumber;
     private String nickname;
     private boolean isAdult;
-    private String createdAt;
-    private String updatedAt;
-    private String deletedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private LocalDateTime deletedAt;
 }
