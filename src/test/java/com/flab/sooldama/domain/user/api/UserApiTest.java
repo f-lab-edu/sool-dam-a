@@ -46,7 +46,8 @@ public class UserApiTest {
     @Test
     @DisplayName("테스트 함수 호출 테스트") // Todo : 삭제 예정
     public void indexTest() throws Exception {
-        this.mockMvc.perform(get("/")).andExpect(status().isOk());
+        this.mockMvc.perform(get("/user/"))
+                .andExpect(status().isOk());
     }
 
     @Test
