@@ -39,6 +39,6 @@ public class ProductApiTest {
         this.mockMvc
                 .perform(get("/products?categoryId=1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.products[0].productCategoryId").value(1));
+                .andExpect(jsonPath("$[0].productCategoryId").value(1));
     }
 }

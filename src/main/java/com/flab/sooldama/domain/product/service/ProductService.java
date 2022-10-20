@@ -2,7 +2,8 @@ package com.flab.sooldama.domain.product.service;
 
 import com.flab.sooldama.domain.product.dao.ProductMapper;
 import com.flab.sooldama.domain.product.domain.Product;
-import com.flab.sooldama.domain.product.dto.response.ProductsResponse;
+import com.flab.sooldama.domain.product.dto.response.ProductResponse;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,12 +13,46 @@ import org.springframework.stereotype.Service;
 public class ProductService {
     private final ProductMapper productMapper;
 
-    public ProductsResponse getProducts(Integer offset, Integer limit) {
+    public List<ProductResponse> getProducts(Integer offset, Integer limit) {
         List<Product> products = productMapper.selectProducts(offset, limit);
-        return ProductsResponse.from(products);
+        List<ProductResponse> productResponses = new ArrayList<>();
+
+        for (Product product : products) {
+            productResponses.add(
+                    ProductResponse.builder()
+                            .id(product.getId())
+                            .productCategoryId(product.getProductCategoryId())
+                            .name(product.getName())
+                            .price(product.getPrice())
+                            .imageUrl(product.getImageUrl())
+                            .description(product.getDescription())
+                            .abv(product.getAbv())
+                            .capacity(product.getCapacity())
+                            .build());
+        }
+
+        return productResponses;
     }
-    public ProductsResponse getProductsByCategoryId(Integer offset, Integer limit, Long categoryId) {
+
+    public List<ProductResponse> getProductsByCategoryId(
+            Integer offset, Integer limit, Long categoryId) {
         List<Product> products = productMapper.selectProductsByCategoryId(offset, limit, categoryId);
-        return ProductsResponse.from(products);
+        List<ProductResponse> productResponses = new ArrayList<>();
+
+        for (Product product : products) {
+            productResponses.add(
+                    ProductResponse.builder()
+                            .id(product.getId())
+                            .productCategoryId(product.getProductCategoryId())
+                            .name(product.getName())
+                            .price(product.getPrice())
+                            .imageUrl(product.getImageUrl())
+                            .description(product.getDescription())
+                            .abv(product.getAbv())
+                            .capacity(product.getCapacity())
+                            .build());
+        }
+
+        return productResponses;
     }
 }

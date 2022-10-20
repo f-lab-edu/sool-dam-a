@@ -1,7 +1,8 @@
 package com.flab.sooldama.domain.product.api;
 
-import com.flab.sooldama.domain.product.dto.response.ProductsResponse;
+import com.flab.sooldama.domain.product.dto.response.ProductResponse;
 import com.flab.sooldama.domain.product.service.ProductService;
+import java.util.List;
 import javax.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -31,12 +32,12 @@ public class ProductApi {
     @RequestParam 어노테이션은 쿼리스트링을 파라미터로 받을 수 있게 도와줍니다.
      */
     @GetMapping("")
-    public ResponseEntity<ProductsResponse> getProducts(
+    public ResponseEntity<List<ProductResponse>> getProducts(
             @RequestParam(defaultValue = "0") @Min(0) Integer offset,
             @RequestParam(defaultValue = "20") Integer limit,
             @RequestParam(required = false) Long categoryId) {
 
-        ProductsResponse productsResponse =
+        List<ProductResponse> productsResponse =
                 (categoryId == null)
                         ? productService.getProducts(offset, limit)
                         : productService.getProductsByCategoryId(offset, limit, categoryId);

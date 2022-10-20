@@ -8,7 +8,7 @@ import static org.mockito.Mockito.when;
 
 import com.flab.sooldama.domain.product.dao.ProductMapper;
 import com.flab.sooldama.domain.product.domain.Product;
-import com.flab.sooldama.domain.product.dto.response.ProductsResponse;
+import com.flab.sooldama.domain.product.dto.response.ProductResponse;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -52,12 +52,12 @@ public class ProductServiceTest {
         when(productMapper.selectProducts(offset, limit)).thenReturn(products);
 
         // when
-        ProductsResponse productsResponse = productService.getProducts(offset, limit);
+        List<ProductResponse> productsResponse = productService.getProducts(offset, limit);
 
         // then
         verify(productMapper).selectProducts(offset, limit);
-        assertEquals(limit - offset, productsResponse.getProducts().size());
-        assertFalse(productsResponse.getProducts().isEmpty());
+        assertEquals(limit - offset, productsResponse.size());
+        assertFalse(productsResponse.isEmpty());
     }
 
     @Test
@@ -72,11 +72,11 @@ public class ProductServiceTest {
         when(productMapper.selectProducts(offset, limit)).thenReturn(products);
 
         // when
-        ProductsResponse productsResponse = productService.getProducts(offset, limit);
+        List<ProductResponse> productsResponse = productService.getProducts(offset, limit);
 
         // then
         verify(productMapper).selectProducts(offset, limit);
-        assertTrue(productsResponse.getProducts().isEmpty());
+        assertTrue(productsResponse.isEmpty());
     }
 
     @Test
@@ -105,13 +105,13 @@ public class ProductServiceTest {
                 .thenReturn(products);
 
         // when
-        ProductsResponse productsResponse =
+        List<ProductResponse> productsResponse =
                 productService.getProductsByCategoryId(offset, limit, categoryId);
 
         // then
         verify(productMapper).selectProductsByCategoryId(offset, limit, categoryId);
-        assertEquals(limit - offset, productsResponse.getProducts().size());
-        assertFalse(productsResponse.getProducts().isEmpty());
+        assertEquals(limit - offset, productsResponse.size());
+        assertFalse(productsResponse.isEmpty());
 
         for (Product product : products) {
             assertEquals(categoryId, product.getProductCategoryId());
@@ -132,11 +132,11 @@ public class ProductServiceTest {
                 .thenReturn(products);
 
         // when
-        ProductsResponse productsResponse =
+        List<ProductResponse> productsResponse =
                 productService.getProductsByCategoryId(offset, limit, categoryId);
 
         // then
         verify(productMapper).selectProductsByCategoryId(offset, limit, categoryId);
-        assertTrue(productsResponse.getProducts().isEmpty());
+        assertTrue(productsResponse.isEmpty());
     }
 }
