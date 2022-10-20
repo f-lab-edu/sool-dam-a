@@ -1,4 +1,4 @@
-package com.flab.sooldama.domain.product.api;
+package com.flab.sooldama.domain.product.integration;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -13,7 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class ProductApiTest {
+public class ProductIntegrationTest {
 
     @Autowired MockMvc mockMvc;
 
