@@ -1,7 +1,6 @@
 package com.flab.sooldama.domain.user.dto.request;
 
 import com.flab.sooldama.domain.user.domain.User;
-import java.time.LocalDateTime;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,8 +18,6 @@ import lombok.NoArgsConstructor;
 public class JoinUserRequest {
 
     @NotNull
-    private Long id;
-    @NotNull
     private String email;
     @NotNull
     private String password;
@@ -31,10 +28,6 @@ public class JoinUserRequest {
     private String nickname;
     @NotNull
     private boolean isAdult;
-    @NotNull
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-    private LocalDateTime deletedAt;
 
     public User toUser() {
         return User.builder()
@@ -44,8 +37,6 @@ public class JoinUserRequest {
                 .phoneNumber(this.getPhoneNumber())
                 .nickname(this.getNickname())
                 .isAdult(this.isAdult())
-                .updatedAt(this.getUpdatedAt())
-                .deletedAt(this.getDeletedAt())
                 .build();
     }
 
