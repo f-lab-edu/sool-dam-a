@@ -1,25 +1,44 @@
 package com.flab.sooldama.domain.user.service;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import com.flab.sooldama.domain.user.dao.UserMapper;
 import com.flab.sooldama.domain.user.domain.User;
 import com.flab.sooldama.domain.user.dto.request.JoinUserRequest;
 import com.flab.sooldama.domain.user.dto.response.JoinUserResponse;
+import java.time.LocalDateTime;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 
-    @Autowired
+    @InjectMocks
     private UserService userService;
+
+    @Mock
+    private UserMapper userMapper;
 
     @Test
     @DisplayName("사용자가 회원가입하면 DB에 회원정보가 추가되나")
     public void userInfoAddedOnDB() {
-        //given 회원가입할 사용자 객체 생성
-        JoinUserRequest request1 = JoinUserRequest.builder()
+        // 테스트 데이터 및 동작 정의
+        JoinUserRequest request = JoinUserRequest.builder()
+                .email("sehoon@fmail.com")
+                .password("abracadabra")
+                .name("sehoon gim")
+                .phoneNumber("010-1010-1010")
+                .nickname("sesoon")
+                .isAdult(true)
+                .build();
+        User user = User.builder()
                 .id(1L)
                 .email("sehoon@fmail.com")
                 .password("abracadabra")
@@ -27,27 +46,34 @@ class UserServiceTest {
                 .phoneNumber("010-1010-1010")
                 .nickname("sesoon")
                 .isAdult(true)
-                .createdAt("2022-10-07")
+                .createdAt(LocalDateTime.now())
                 .build();
 
-        //when service에서 dao에 회원가입 요청
-        userService.insertUser(request1);
+        when(userMapper.insertUser(any(User.class))).thenReturn(JoinUserResponse.getResponse(user));
+        when(userMapper.findUserById(any(Long.TYPE))).thenReturn(user);
 
-        //then DB에 가입한 회원 정보가 있는지 확인
-        User joinedUser = userService.findUserById(request1.getId()).getUser();
-        Assertions.assertThat(joinedUser.getId()).isEqualTo(1L);
+        // 실행
+        JoinUserResponse response = userService.insertUser(request);
+        JoinUserResponse joinedUserResponse = userService.findUserById(response.getUser().getId());
+
+        // 행위 검증
+        Assertions.assertThat(joinedUserResponse.getUser().getId()).isEqualTo(1L);
+        verify(userMapper).insertUser(any(User.class));
+        verify(userMapper).findUserById(any(Long.TYPE));
     }
 
     @Test
     @DisplayName("없는 아이디로 사용자를 조회")
     public void findUserWithNonExistingId() {
-       //given 없는 아이디를 만든다
-       Long wrongId = -1L;
+        // 테스트 데이터 및 동작 정의
+        Long wrongId = -1L;
+        when(userMapper.findUserById(wrongId)).thenReturn(null);
 
-       //when service에 없는 아이디에 대한 회원 정보를 요청
+        // 실행
         JoinUserResponse wrongResponse = userService.findUserById(wrongId);
 
-        //then 오류 발생
+        // 행위 검증
         Assertions.assertThat(wrongResponse.getUser()).isNull();
+        verify(userMapper).findUserById(wrongId);
     }
 }
