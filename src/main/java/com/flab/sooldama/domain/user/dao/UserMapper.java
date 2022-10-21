@@ -10,4 +10,6 @@ public interface UserMapper {
     JoinUserResponse insertUser(User user);
 
     User findUserById(Long id);
+
+    User findUserByEmail(String email);
 }
