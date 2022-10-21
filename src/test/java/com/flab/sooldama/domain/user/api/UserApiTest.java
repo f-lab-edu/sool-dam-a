@@ -56,14 +56,12 @@ public class UserApiTest {
         //Given 서비스를 거친 결과값
         String content = objectMapper.writeValueAsString(
                 JoinUserRequest.builder()
-                        .id(13L)
                         .email("younghee@fmail.com")
                         .password("1q2w3e4r!")
                         .name("younghee lee")
                         .phoneNumber("010-0101-0101")
                         .nickname("yh")
                         .isAdult(true)
-                        .createdAt(LocalDateTime.now())
                         .build());
 
         //Then 회원가입 api에 content를 넣고 호출했을 때
