@@ -4,6 +4,7 @@ import com.flab.sooldama.domain.user.dao.UserMapper;
 import com.flab.sooldama.domain.user.domain.User;
 import com.flab.sooldama.domain.user.dto.request.JoinUserRequest;
 import com.flab.sooldama.domain.user.dto.response.JoinUserResponse;
+import com.flab.sooldama.domain.user.exception.DuplicateEmailExistsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,10 @@ public class UserService {
     private final UserMapper userMapper;
 
     public JoinUserResponse insertUser(JoinUserRequest request) {
+        if (userMapper.findUserByEmail(request.getEmail()) != null) {
+            throw new DuplicateEmailExistsException("이메일 주소 중복입니다");
+        }
+
         JoinUserResponse response = userMapper.insertUser(request.toUser());
         return response;
     }
