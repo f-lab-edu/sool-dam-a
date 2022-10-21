@@ -49,7 +49,7 @@ class UserServiceTest {
                 .createdAt(LocalDateTime.now())
                 .build();
 
-        when(userMapper.insertUser(any(User.class))).thenReturn(JoinUserResponse.getResponse(user));
+        when(userMapper.insertUser(any(User.class))).thenReturn(JoinUserResponse.from(user));
         when(userMapper.findUserById(any(Long.TYPE))).thenReturn(user);
 
         // 실행

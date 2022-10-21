@@ -10,7 +10,7 @@ public class JoinUserResponse {
 
     private User user;
 
-    public static JoinUserResponse getResponse(User user) {
+    public static JoinUserResponse from(User user) {
         return JoinUserResponse.builder()
                 .user(user)
                 .build();

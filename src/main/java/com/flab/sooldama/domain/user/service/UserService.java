@@ -21,6 +21,6 @@ public class UserService {
 
     public JoinUserResponse findUserById(Long id) {
         User matchedUser = userMapper.findUserById(id);
-        return JoinUserResponse.getResponse(matchedUser);
+        return JoinUserResponse.from(matchedUser);
     }
 }
