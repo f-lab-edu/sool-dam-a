@@ -14,8 +14,9 @@ public class UserService {
 
     private final UserMapper userMapper;
 
-    public void insertUser(JoinUserRequest request) {
-        userMapper.insertUser(request.toUser());
+    public JoinUserResponse insertUser(JoinUserRequest request) {
+        JoinUserResponse response = userMapper.insertUser(request.toUser());
+        return response;
     }
 
     public JoinUserResponse findUserById(Long id) {

@@ -1,6 +1,7 @@
 package com.flab.sooldama.domain.user.api;
 
 import com.flab.sooldama.domain.user.dto.request.JoinUserRequest;
+import com.flab.sooldama.domain.user.dto.response.JoinUserResponse;
 import com.flab.sooldama.domain.user.service.UserService;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -44,11 +45,12 @@ public class UserApi {
      */
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/join")
-    public void joinUser(@Valid @RequestBody JoinUserRequest request) throws Exception {
+    public JoinUserResponse joinUser(@Valid @RequestBody JoinUserRequest request) throws Exception {
         if (request.getEmail() == null || request.getPassword() == null
         || request.getName() == null || request.getPhoneNumber() == null) {
             throw new Exception("필수 정보 누락");
         }
-        userService.insertUser(request);
+        JoinUserResponse response = userService.insertUser(request);
+        return response;
     }
 }
