@@ -1,5 +1,6 @@
 package com.flab.sooldama.domain.user.service;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -8,6 +9,8 @@ import com.flab.sooldama.domain.user.dao.UserMapper;
 import com.flab.sooldama.domain.user.domain.User;
 import com.flab.sooldama.domain.user.dto.request.JoinUserRequest;
 import com.flab.sooldama.domain.user.dto.response.JoinUserResponse;
+import com.flab.sooldama.domain.user.exception.DuplicateEmailExistsException;
+import com.flab.sooldama.domain.user.exception.NoSuchUserException;
 import java.time.LocalDateTime;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -67,13 +70,49 @@ class UserServiceTest {
     public void findUserWithNonExistingId() {
         // 테스트 데이터 및 동작 정의
         Long wrongId = -1L;
-        when(userMapper.findUserById(wrongId)).thenReturn(null);
+        when(userMapper.findUserById(wrongId)).thenThrow(NoSuchUserException.class);
 
         // 실행
-        JoinUserResponse wrongResponse = userService.findUserById(wrongId);
+        assertThrows(NoSuchUserException.class, () -> {
+            userService.findUserById(wrongId);
+        });
 
         // 행위 검증
-        Assertions.assertThat(wrongResponse.getUser()).isNull();
         verify(userMapper).findUserById(wrongId);
+    }
+
+    @Test
+    @DisplayName("입력된 이메일 주소가 이미 있을 경우")
+    public void checkDuplicateEmailExists() {
+        // 테스트 데이터 및 동작 정의
+        JoinUserRequest request = JoinUserRequest.builder()
+                .email("sehoon@fmail.com")
+                .password("abracadabra")
+                .name("sehoon gim")
+                .phoneNumber("010-1010-1010")
+                .nickname("sesoon")
+                .isAdult(true)
+                .build();
+        User registeredUser = User.builder()
+                .id(1L)
+                .email("sehoon@fmail.com")
+                .password("abracadabra")
+                .name("sehoon gim")
+                .phoneNumber("010-1010-1010")
+                .nickname("sesoon")
+                .isAdult(true)
+                .createdAt(LocalDateTime.now())
+                .build();
+
+        when(userMapper.insertUser(any(User.class))).thenThrow(DuplicateEmailExistsException.class);
+
+        // 실행
+        assertThrows(DuplicateEmailExistsException.class, () -> {
+            userService.insertUser(request);
+        });
+
+        // 행위 검증
+        verify(userMapper).insertUser(any(User.class));
+        verify(userMapper).findUserByEmail(any(String.class));
     }
 }
