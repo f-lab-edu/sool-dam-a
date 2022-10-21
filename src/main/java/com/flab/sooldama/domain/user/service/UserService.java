@@ -4,6 +4,7 @@ import com.flab.sooldama.domain.user.dao.UserMapper;
 import com.flab.sooldama.domain.user.domain.User;
 import com.flab.sooldama.domain.user.dto.request.JoinUserRequest;
 import com.flab.sooldama.domain.user.dto.response.JoinUserResponse;
+import com.flab.sooldama.domain.user.exception.NoSuchUserException;
 import com.flab.sooldama.domain.user.exception.DuplicateEmailExistsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,10 @@ public class UserService {
 
     public JoinUserResponse findUserById(Long id) {
         User matchedUser = userMapper.findUserById(id);
+        if (matchedUser.getClass() == null) {
+            throw new NoSuchUserException("사용자를 찾을 수 없습니다");
+        }
+
         return JoinUserResponse.from(matchedUser);
     }
 }
