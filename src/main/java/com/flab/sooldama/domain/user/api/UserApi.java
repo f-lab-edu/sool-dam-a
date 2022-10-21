@@ -6,11 +6,11 @@ import com.flab.sooldama.domain.user.service.UserService;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 /*
@@ -43,14 +43,10 @@ public class UserApi {
     이 어노테이션을 붙이지 않은 채로 클라이언트에서 JSON 형식 데이터를 전달하면 DTO 객체로 변환되지 않아
     api가 올바르게 작동하지 않습니다.
      */
-    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/join")
-    public JoinUserResponse joinUser(@Valid @RequestBody JoinUserRequest request) throws Exception {
-        if (request.getEmail() == null || request.getPassword() == null
-        || request.getName() == null || request.getPhoneNumber() == null) {
-            throw new Exception("필수 정보 누락");
-        }
+    public ResponseEntity<JoinUserResponse> joinUser(@Valid @RequestBody JoinUserRequest request) {
         JoinUserResponse response = userService.insertUser(request);
-        return response;
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 }
