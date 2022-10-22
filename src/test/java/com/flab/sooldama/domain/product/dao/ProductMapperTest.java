@@ -14,8 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class ProductMapperTest {
 
-	@Autowired
-	private ProductMapper productMapper;
+    @Autowired private ProductMapper productMapper;
 
 	@Test
 	@DisplayName("전체 제품 조회 테스트")
