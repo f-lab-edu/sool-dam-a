@@ -11,8 +11,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class ProductService {
-
-	private final ProductMapper productMapper;
+    private final ProductMapper productMapper;
 
 	public List<ProductResponse> getProducts(Integer offset, Integer limit, Long categoryId) {
 		List<Product> products = productMapper.selectProducts(offset, limit, categoryId);
@@ -32,6 +31,21 @@ public class ProductService {
 					.build());
 		}
 
-		return productResponses;
-	}
+        return productResponses;
+    }
+
+    public ProductResponse getProductById(Long productId) {
+        Product product = productMapper.selectProductById(productId);
+
+        return ProductResponse.builder()
+			.id(product.getId())
+			.productCategoryId(product.getProductCategoryId())
+			.name(product.getName())
+			.price(product.getPrice())
+			.imageUrl(product.getImageUrl())
+			.description(product.getDescription())
+			.abv(product.getAbv())
+			.capacity(product.getCapacity())
+			.build();
+    }
 }

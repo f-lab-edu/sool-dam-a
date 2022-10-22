@@ -12,4 +12,6 @@ public interface ProductMapper {
 		@Param("offset") Integer offset,
 		@Param("limit") Integer limit,
 		@Param("categoryId") Long categoryId);
+
+    Product selectProductById(Long productId);
 }
