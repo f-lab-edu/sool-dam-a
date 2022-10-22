@@ -1,7 +1,6 @@
 package com.flab.sooldama.domain.product.api;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.flab.sooldama.domain.product.service.ProductService;
@@ -42,7 +41,6 @@ public class ProductApiTest {
     public void getProductTest() throws Exception {
         this.mockMvc
 			.perform(get("/products/1"))
-			.andExpect(status().isOk())
-			.andDo(print());
+			.andExpect(status().isOk());
     }
 }

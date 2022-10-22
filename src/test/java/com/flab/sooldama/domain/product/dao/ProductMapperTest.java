@@ -51,4 +51,11 @@ public class ProductMapperTest {
             throw new ProductNotFoundException("제품이 존재하지 않습니다.");
         }
     }
+
+    @Test
+    @DisplayName("아이디로 존재하지 않는 제품 조회시 빈 객체 반환")
+    public void selectProductByIdFailTest() {
+        Optional<Product> product = productMapper.selectProductById(1000L);
+        assertTrue(product.isEmpty());
+    }
 }
