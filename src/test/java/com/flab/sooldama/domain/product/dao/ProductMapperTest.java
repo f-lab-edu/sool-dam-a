@@ -3,7 +3,9 @@ package com.flab.sooldama.domain.product.dao;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.flab.sooldama.domain.product.domain.Product;
+import com.flab.sooldama.domain.product.exception.ProductNotFoundException;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,4 +40,16 @@ public class ProductMapperTest {
 			assertEquals(1L, product.getProductCategoryId());
 		}
 	}
+
+    @Test
+    @DisplayName("아이디로 제품 조회 테스트")
+    public void selectProductByIdTest() {
+        Optional<Product> product = productMapper.selectProductById(1L);
+
+        if (product.isPresent()) {
+            assertEquals(1L, product.get().getId());
+        } else {
+            throw new ProductNotFoundException("제품이 존재하지 않습니다.");
+        }
+    }
 }
