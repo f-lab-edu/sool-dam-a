@@ -139,7 +139,7 @@ public class ProductServiceTest {
 
         // when
         List<ProductResponse> productsResponse =
-                productService.getProducts(offset, limit, categoryId);
+			productService.getProducts(offset, limit, categoryId);
 
         // then
         verify(productMapper).selectProducts(offset, limit, categoryId);
@@ -153,18 +153,18 @@ public class ProductServiceTest {
         // given
         long productId = 1L;
         Product product = Product.builder()
-                .id(productId)
-                .productCategoryId(1L)
-                .name("test")
-                .price(1000)
-                .imageUrl("test")
-                .description("test")
-                .abv(1.0)
-                .capacity(350)
-                .build();
+			.id(productId)
+			.productCategoryId(1L)
+			.name("test")
+			.price(1000)
+			.imageUrl("test")
+			.description("test")
+			.abv(1.0)
+			.capacity(350)
+			.build();
 
         when(productMapper.selectProductById(productId))
-                .thenReturn(Optional.ofNullable(product));
+			.thenReturn(Optional.ofNullable(product));
 
         // when
         ProductResponse productResponse = productService.getProductById(productId);
@@ -182,11 +182,11 @@ public class ProductServiceTest {
         // given
         long productId = 1L;
         when(productMapper.selectProductById(productId))
-                .thenReturn(Optional.empty());
+			.thenReturn(Optional.empty());
 
         // then
         assertThrows(ProductNotFoundException.class,
         // when
-        ()-> productService.getProductById(productId));
+			()-> productService.getProductById(productId));
     }
 }

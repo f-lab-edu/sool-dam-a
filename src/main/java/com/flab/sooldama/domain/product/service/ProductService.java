@@ -37,7 +37,7 @@ public class ProductService {
 
     public ProductResponse getProductById(Long productId) {
         Product product = productMapper.selectProductById(productId)
-                .orElseThrow(() -> new ProductNotFoundException("제품이 존재하지 않습니다."));
+			.orElseThrow(() -> new ProductNotFoundException("제품이 존재하지 않습니다."));
 
         return ProductResponse.builder()
 			.id(product.getId())

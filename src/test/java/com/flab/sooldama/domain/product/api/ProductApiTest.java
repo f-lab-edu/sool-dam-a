@@ -41,8 +41,8 @@ public class ProductApiTest {
     @DisplayName("아이디로 제품 조회 성공 테스트")
     public void getProductTest() throws Exception {
         this.mockMvc
-                .perform(get("/products/1"))
-                .andExpect(status().isOk())
-                .andDo(print());
+			.perform(get("/products/1"))
+			.andExpect(status().isOk())
+			.andDo(print());
     }
 }
