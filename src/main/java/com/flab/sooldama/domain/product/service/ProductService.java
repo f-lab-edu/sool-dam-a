@@ -3,6 +3,7 @@ package com.flab.sooldama.domain.product.service;
 import com.flab.sooldama.domain.product.dao.ProductMapper;
 import com.flab.sooldama.domain.product.domain.Product;
 import com.flab.sooldama.domain.product.dto.response.ProductResponse;
+import com.flab.sooldama.domain.product.exception.ProductNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,8 @@ public class ProductService {
     }
 
     public ProductResponse getProductById(Long productId) {
-        Product product = productMapper.selectProductById(productId);
+        Product product = productMapper.selectProductById(productId)
+                .orElseThrow(() -> new ProductNotFoundException("제품이 존재하지 않습니다."));
 
         return ProductResponse.builder()
 			.id(product.getId())

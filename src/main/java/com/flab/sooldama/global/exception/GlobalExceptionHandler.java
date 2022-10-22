@@ -1,5 +1,6 @@
 package com.flab.sooldama.global.exception;
 
+import com.flab.sooldama.domain.product.exception.ProductNotFoundException;
 import com.flab.sooldama.domain.user.exception.DuplicateEmailExistsException;
 import com.flab.sooldama.domain.user.exception.NoSuchUserException;
 import org.springframework.http.HttpStatus;
@@ -8,7 +9,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import javax.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity.BodyBuilder;
 
 /*
 @Slf4j 어노테이션은 Lombok 어노테이션중 하나로, 좀 더 편리하게 로그를 찍을 수 있게 도와줍니다.
@@ -48,4 +48,10 @@ public class GlobalExceptionHandler {
 		log.error(e.getMessage(), e);
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 	}
+
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<HttpStatus> productNotFoundException(ProductNotFoundException e) {
+        log.error(e.getMessage(), e);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
 }
