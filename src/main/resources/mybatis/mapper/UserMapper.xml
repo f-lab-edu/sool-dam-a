@@ -20,7 +20,7 @@
     SELECT * FROM user WHERE ID = #{id}
   </select>
 
-  <select id="findUserById" parameterType="String" resultType="com.flab.sooldama.domain.user.domain.User">
+  <select id="findUserByEmail" parameterType="String" resultType="com.flab.sooldama.domain.user.domain.User">
     SELECT * FROM user WHERE email = #{email}
   </select>
 
