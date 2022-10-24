@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 public class JoinUserRequest {
 
     @NotNull
-    @Email(message = "이메일 형식에 맞지 않습니다")
+    @Email(regexp = "^[A-Za-z][A-Za-z0-9.-_]+@[A-Za-z0-9.-_]+.[A-Za-z]+", message = "이메일 형식에 맞지 않습니다")
     private String email;
     @NotNull
     private String password;
