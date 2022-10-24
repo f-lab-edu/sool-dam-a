@@ -1,17 +1,28 @@
 package com.flab.sooldama.domain.user.api;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.flab.sooldama.domain.user.domain.User;
 import com.flab.sooldama.domain.user.dto.request.JoinUserRequest;
+import com.flab.sooldama.domain.user.exception.DuplicateEmailExistsException;
 import com.flab.sooldama.domain.user.service.UserService;
 import java.time.LocalDateTime;
+import java.util.Iterator;
+import java.util.Set;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -40,8 +51,14 @@ public class UserApiTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @InjectMocks
+    private UserApi userApi;
+
     @MockBean
     private UserService userService;
+
+    @Autowired
+    Validator validator;
 
     @Test
     @DisplayName("테스트 함수 호출 테스트") // Todo : 삭제 예정
@@ -88,5 +105,69 @@ public class UserApiTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("이메일이 중복일 경우 bad request status 반환")
+    public void joinWithDuplicationEmailTest() throws Exception {
+        // 테스트 데이터 및 동작 정의
+        JoinUserRequest request = JoinUserRequest.builder()
+                .email("sehoon@fmail.com")
+                .password("abracadabra")
+                .name("sehoon gim")
+                .phoneNumber("010-1010-1010")
+                .nickname("sesoon")
+                .isAdult(true)
+                .build();
+
+        String content = objectMapper.writeValueAsString(request);
+
+        User registeredUser = User.builder()
+                .id(1L)
+                .email("sehoon@fmail.com")
+                .password("abracadabra")
+                .name("sehoon gim")
+                .phoneNumber("010-1010-1010")
+                .nickname("sesoon")
+                .isAdult(true)
+                .createdAt(LocalDateTime.now())
+                .build();
+
+        when(userService.insertUser(any(JoinUserRequest.class))).thenThrow(DuplicateEmailExistsException.class);
+
+        // 실행
+        mockMvc.perform(post("/user/join")
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+
+        // 행위 검증
+        verify(userService, times(1)).insertUser(any(JoinUserRequest.class));
+    }
+
+    @Test
+    @DisplayName("유효하지 않은 이메일 주소일 경우")
+    public void checkInvalidEmail() {
+        String invalidEmail = "sehoon@fmaildotcom";
+        String messageForInvalidEmail = "이메일 형식에 맞지 않습니다";
+
+        JoinUserRequest request = JoinUserRequest.builder()
+                .email(invalidEmail)
+                .password("abracadabra")
+                .name("sehoon gim")
+                .phoneNumber("010-1010-1010")
+                .nickname("sesoon")
+                .isAdult(true)
+                .build();
+
+        Set<ConstraintViolation<JoinUserRequest>> validate = validator.validate(request);
+
+        Iterator<ConstraintViolation<JoinUserRequest>> iterator = validate.iterator();
+        while (iterator.hasNext()) {
+            ConstraintViolation<JoinUserRequest> next = iterator.next();
+            Assertions.assertThat(next.getMessage()).contains(messageForInvalidEmail);
+        }
     }
 }
