@@ -105,16 +105,6 @@ class UserServiceTest {
                 .nickname("sesoon")
                 .isAdult(true)
                 .build();
-        User registeredUser = User.builder()
-                .id(1L)
-                .email("sehoon@fmail.com")
-                .password("abracadabra")
-                .name("sehoon gim")
-                .phoneNumber("010-1010-1010")
-                .nickname("sesoon")
-                .isAdult(true)
-                .createdAt(LocalDateTime.now())
-                .build();
 
         when(userMapper.insertUser(any(User.class))).thenThrow(DuplicateEmailExistsException.class);
 
