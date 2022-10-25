@@ -1,6 +1,6 @@
 package com.flab.sooldama.domain.user.dto.response;
 
-import com.flab.sooldama.domain.user.domain.User;
+import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -8,11 +8,14 @@ import lombok.Getter;
 @Builder
 public class JoinUserResponse {
 
-    private User user;
-
-    public static JoinUserResponse from(User user) {
-        return JoinUserResponse.builder()
-                .user(user)
-                .build();
-    }
+    private Long id;
+    private String email;
+    private String password;
+    private String name;
+    private String phoneNumber;
+    private String nickname;
+    private boolean isAdult;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private LocalDateTime deletedAt;
 }
