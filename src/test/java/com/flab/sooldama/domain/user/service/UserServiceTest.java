@@ -20,6 +20,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+/*
+ * @ExtendWith 어노테이션은 테스트에서 사용할 클래스를 명시합니다. @ExtendWith(MockitoExtension.class)를 사용함으로써
+ * openMocks 등의 메소드를 생략할 수 있습니다.
+ */
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 
