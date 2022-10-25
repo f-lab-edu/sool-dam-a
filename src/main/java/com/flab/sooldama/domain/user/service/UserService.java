@@ -31,6 +31,17 @@ public class UserService {
             throw new NoSuchUserException("사용자를 찾을 수 없습니다");
         }
 
-        return JoinUserResponse.from(matchedUser);
+        return JoinUserResponse.builder()
+                .id(matchedUser.getId())
+                .email(matchedUser.getEmail())
+                .password(matchedUser.getPassword())
+                .name(matchedUser.getName())
+                .phoneNumber(matchedUser.getPhoneNumber())
+                .nickname(matchedUser.getNickname())
+                .isAdult(matchedUser.isAdult())
+                .createdAt(matchedUser.getCreatedAt())
+                .updatedAt(matchedUser.getUpdatedAt())
+                .deletedAt(matchedUser.getDeletedAt())
+                .build();
     }
 }

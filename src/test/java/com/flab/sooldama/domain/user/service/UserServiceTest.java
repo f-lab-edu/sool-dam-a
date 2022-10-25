@@ -52,15 +52,27 @@ class UserServiceTest {
                 .createdAt(LocalDateTime.now())
                 .build();
 
-        when(userMapper.insertUser(any(User.class))).thenReturn(JoinUserResponse.from(user));
+        when(userMapper.insertUser(any(User.class))).thenReturn(JoinUserResponse.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .password(user.getPassword())
+                .name(user.getName())
+                .phoneNumber(user.getPhoneNumber())
+                .nickname(user.getNickname())
+                .isAdult(user.isAdult())
+                .createdAt(user.getCreatedAt())
+                .updatedAt(user.getUpdatedAt())
+                .deletedAt(user.getDeletedAt())
+                .build());
+
         when(userMapper.findUserById(any(Long.TYPE))).thenReturn(user);
 
         // 실행
         JoinUserResponse response = userService.insertUser(request);
-        JoinUserResponse joinedUserResponse = userService.findUserById(response.getUser().getId());
+        JoinUserResponse joinedUserResponse = userService.findUserById(response.getId());
 
         // 행위 검증
-        Assertions.assertThat(joinedUserResponse.getUser().getId()).isEqualTo(1L);
+        Assertions.assertThat(joinedUserResponse.getId()).isEqualTo(1L);
         verify(userMapper).insertUser(any(User.class));
         verify(userMapper).findUserById(any(Long.TYPE));
     }
