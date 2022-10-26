@@ -1,11 +1,15 @@
 package com.flab.sooldama.domain.user.dao;
 
 import com.flab.sooldama.domain.user.domain.User;
+import java.time.LocalDateTime;
+import java.util.Optional;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 
 @SpringBootTest
 public class UserMapperTest {
@@ -13,20 +17,25 @@ public class UserMapperTest {
     @Autowired
     private UserMapper userMapper;
 
-    @Test
-    @DisplayName("id로 사용자 검색 시 사용자가 없을 경우 NPE 발생")
-    public void findNonExistsUserById() {
-        Long wrongId = -1L;
-
-        Assertions.assertThat(userMapper.findUserById(wrongId)).isNull();
+    @BeforeEach
+    public void setUp() {
+        userMapper.deleteAllUsers();
     }
 
     @Test
-    @DisplayName("email로 사용자 검색 시 사용자가 없을 경우 NPE 발생")
-    public void findNonExistsUserByEmail() {
+    @DisplayName("id로 사용자 검색 시 사용자가 없을 경우 Optional.empty 반환")
+    public void findNonExistsUserById () {
+        Long wrongId = -1L;
+
+        Assertions.assertThat(userMapper.findUserById(wrongId)).isEmpty();
+    }
+
+    @Test
+    @DisplayName("email로 사용자 검색 시 사용자가 없을 경우 Optional.empty 반환")
+    public void findNonExistsUserByEmail () {
         String wrongEmail = "wrong@email.com";
 
-        Assertions.assertThat(userMapper.findUserByEmail(wrongEmail)).isNull();
+        Assertions.assertThat(userMapper.findUserByEmail(wrongEmail)).isEmpty();
     }
 
     @Test
