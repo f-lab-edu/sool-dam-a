@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @ResponseBody 를 붙이지 않아도 문자열과 JSON 등을 전송할 수 있게 해줍니다.
  */
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserApi {
 
@@ -28,7 +28,7 @@ public class UserApi {
     @GetMapping 어노테이션은 HTTP GET 요청을 처리하는 메서드를 맵핑(@RequestMapping) 하는 어노테이션 입니다.
     Url 에 따라서 어떤 정보를 보여줄지 결정합니다.
      */
-    @GetMapping("/")
+    @GetMapping(path = "")
     public String index() { // Todo: 삭제 예정 (테스트 전용입니다.)
         return "hello world";
     }
@@ -43,7 +43,7 @@ public class UserApi {
     이 어노테이션을 붙이지 않은 채로 클라이언트에서 JSON 형식 데이터를 전달하면 DTO 객체로 변환되지 않아
     api가 올바르게 작동하지 않습니다.
      */
-    @PostMapping("/join")
+    @PostMapping(path = "")
     public ResponseEntity<JoinUserResponse> joinUser(@Valid @RequestBody JoinUserRequest request) {
         JoinUserResponse response = userService.insertUser(request);
 
