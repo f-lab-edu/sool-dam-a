@@ -1,5 +1,6 @@
 package com.flab.sooldama.domain.user.dao;
 
+import com.flab.sooldama.domain.user.domain.User;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,5 +27,21 @@ public class UserMapperTest {
         String wrongEmail = "wrong@email.com";
 
         Assertions.assertThat(userMapper.findUserByEmail(wrongEmail)).isNull();
+    }
+
+    @Test
+    @DisplayName("UserMapper 클래스와 UserMapper.xml의 insertUser 반환 타입 불일치 오류 확인")
+    public void insertUserReturnTypeNotMatched() {
+        userMapper.deleteAllUsers();
+
+        User user = User.builder()
+                .email("sehoon@fmail.com")
+                .password("abracadabra")
+                .name("sehoon gim")
+                .phoneNumber("010-1010-1010")
+                .nickname("sesoon")
+                .isAdult(true)
+                .build();
+        userMapper.insertUser(user);
     }
 }
