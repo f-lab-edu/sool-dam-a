@@ -6,6 +6,7 @@ import com.flab.sooldama.domain.user.dto.request.JoinUserRequest;
 import com.flab.sooldama.domain.user.dto.response.JoinUserResponse;
 import com.flab.sooldama.domain.user.exception.NoSuchUserException;
 import com.flab.sooldama.domain.user.exception.DuplicateEmailExistsException;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +18,13 @@ public class UserService {
     private final UserMapper userMapper;
 
     public JoinUserResponse insertUser(JoinUserRequest request) {
-        if (userMapper.findUserByEmail(request.getEmail()) != null) {
+        userMapper.findUserByEmail(request.getEmail()).ifPresent(user -> {
             throw new DuplicateEmailExistsException("이메일 주소 중복입니다");
-        }
+        });
 
         userMapper.insertUser(request.toUser());
-        User userByEmail = userMapper.findUserByEmail(request.getEmail());
+        User userByEmail = userMapper.findUserByEmail(request.getEmail()).get();
+
         return JoinUserResponse.builder()
                 .id(userByEmail.getId())
                 .email(userByEmail.getEmail())
@@ -38,10 +40,9 @@ public class UserService {
     }
 
     public JoinUserResponse findUserById(Long id) {
-        User matchedUser = userMapper.findUserById(id);
-        if (matchedUser.getClass() == null) {
+        User matchedUser = userMapper.findUserById(id).orElseThrow(() -> {
             throw new NoSuchUserException("사용자를 찾을 수 없습니다");
-        }
+        });
 
         return JoinUserResponse.builder()
                 .id(matchedUser.getId())
