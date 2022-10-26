@@ -61,13 +61,6 @@ public class UserApiTest {
     Validator validator;
 
     @Test
-    @DisplayName("테스트 함수 호출 테스트") // Todo : 삭제 예정
-    public void indexTest() throws Exception {
-        this.mockMvc.perform(get("/users"))
-                .andExpect(status().isOk());
-    }
-
-    @Test
     @DisplayName("회원가입 성공 테스트")
     public void joinSuccessTest() throws Exception {
         //Given 서비스를 거친 결과값

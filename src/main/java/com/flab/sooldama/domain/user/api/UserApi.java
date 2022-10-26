@@ -28,10 +28,6 @@ public class UserApi {
     @GetMapping 어노테이션은 HTTP GET 요청을 처리하는 메서드를 맵핑(@RequestMapping) 하는 어노테이션 입니다.
     Url 에 따라서 어떤 정보를 보여줄지 결정합니다.
      */
-    @GetMapping(path = "")
-    public String index() { // Todo: 삭제 예정 (테스트 전용입니다.)
-        return "hello world";
-    }
 
     /*
     @PostMapping 어노테이션은 HTTP POST 요청을 처리하는 메서드를 매핑하는 어노테이션입니다.
