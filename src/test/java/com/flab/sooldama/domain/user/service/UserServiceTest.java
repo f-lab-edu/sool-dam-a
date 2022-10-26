@@ -2,6 +2,7 @@ package com.flab.sooldama.domain.user.service;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -56,20 +57,9 @@ class UserServiceTest {
                 .createdAt(LocalDateTime.now())
                 .build();
 
-        when(userMapper.insertUser(any(User.class))).thenReturn(JoinUserResponse.builder()
-                .id(user.getId())
-                .email(user.getEmail())
-                .password(user.getPassword())
-                .name(user.getName())
-                .phoneNumber(user.getPhoneNumber())
-                .nickname(user.getNickname())
-                .isAdult(user.isAdult())
-                .createdAt(user.getCreatedAt())
-                .updatedAt(user.getUpdatedAt())
-                .deletedAt(user.getDeletedAt())
-                .build());
-
-        when(userMapper.findUserById(any(Long.TYPE))).thenReturn(user);
+        doNothing().when(userMapper).insertUser(any(User.class));
+        when(userMapper.findUserByEmail(any(String.class))).thenReturn(user);
+        when(userMapper.findUserById(any(Long.class))).thenReturn(user);
 
         // 실행
         JoinUserResponse response = userService.insertUser(request);
@@ -78,6 +68,7 @@ class UserServiceTest {
         // 행위 검증
         Assertions.assertThat(joinedUserResponse.getId()).isEqualTo(1L);
         verify(userMapper).insertUser(any(User.class));
+        verify(userMapper).findUserByEmail(any(String.class));
         verify(userMapper).findUserById(any(Long.TYPE));
     }
 
@@ -110,7 +101,8 @@ class UserServiceTest {
                 .isAdult(true)
                 .build();
 
-        when(userMapper.insertUser(any(User.class))).thenThrow(DuplicateEmailExistsException.class);
+        doNothing().when(userMapper).insertUser(any(User.class));
+        when(userMapper.findUserByEmail(any(String.class))).thenThrow(DuplicateEmailExistsException.class);
 
         // 실행
         assertThrows(DuplicateEmailExistsException.class, () -> {

@@ -21,8 +21,20 @@ public class UserService {
             throw new DuplicateEmailExistsException("이메일 주소 중복입니다");
         }
 
-        JoinUserResponse response = userMapper.insertUser(request.toUser());
-        return response;
+        userMapper.insertUser(request.toUser());
+        User userByEmail = userMapper.findUserByEmail(request.getEmail());
+        return JoinUserResponse.builder()
+                .id(userByEmail.getId())
+                .email(userByEmail.getEmail())
+                .password(userByEmail.getPassword())
+                .name(userByEmail.getName())
+                .phoneNumber(userByEmail.getPhoneNumber())
+                .nickname(userByEmail.getNickname())
+                .isAdult(userByEmail.isAdult())
+                .createdAt(userByEmail.getCreatedAt())
+                .updatedAt(userByEmail.getUpdatedAt())
+                .deletedAt(userByEmail.getDeletedAt())
+                .build();
     }
 
     public JoinUserResponse findUserById(Long id) {
