@@ -63,7 +63,7 @@ public class UserApiTest {
     @Test
     @DisplayName("테스트 함수 호출 테스트") // Todo : 삭제 예정
     public void indexTest() throws Exception {
-        this.mockMvc.perform(get("/user/"))
+        this.mockMvc.perform(get("/users"))
                 .andExpect(status().isOk());
     }
 
@@ -82,7 +82,7 @@ public class UserApiTest {
                         .build());
 
         //Then 회원가입 api에 content를 넣고 호출했을 때
-        mockMvc.perform(post("/user/join")
+        mockMvc.perform(post("/users")
                         .content(content)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -100,7 +100,7 @@ public class UserApiTest {
                         .name("younghee lee")
                         .build());
         //Then 회원가입 api에 content를 넣고 호출했을 때
-        mockMvc.perform(post("/user/join")
+        mockMvc.perform(post("/users")
                         .content(content)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -136,7 +136,7 @@ public class UserApiTest {
         when(userService.insertUser(any(JoinUserRequest.class))).thenThrow(DuplicateEmailExistsException.class);
 
         // 실행
-        mockMvc.perform(post("/user/join")
+        mockMvc.perform(post("/users")
                         .content(content)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
