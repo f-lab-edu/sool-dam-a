@@ -23,6 +23,21 @@ public class UserMapperTest {
     }
 
     @Test
+    @DisplayName("필수 정보 넣지 않을 경우 insertUser 실패")
+    public void failInsertUser() {
+        User user = User.builder()
+                .email("sehoon@fmail.com")
+                .name("sehoon gim")
+                .phoneNumber("010-1010-1010")
+                .nickname("sesoon")
+                .isAdult(true)
+                .build();
+
+        org.junit.jupiter.api.Assertions.assertThrows(DataIntegrityViolationException.class,
+                () -> userMapper.insertUser(user));
+    }
+
+    @Test
     @DisplayName("id로 사용자 검색 시 사용자가 없을 경우 Optional.empty 반환")
     public void findNonExistsUserById () {
         Long wrongId = -1L;
@@ -40,9 +55,7 @@ public class UserMapperTest {
 
     @Test
     @DisplayName("UserMapper 클래스와 UserMapper.xml의 insertUser 반환 타입 불일치 오류 확인")
-    public void insertUserReturnTypeNotMatched() {
-        userMapper.deleteAllUsers();
-
+    public void insertUserReturnTypeNotMatched () {
         User user = User.builder()
                 .email("sehoon@fmail.com")
                 .password("abracadabra")
@@ -51,6 +64,7 @@ public class UserMapperTest {
                 .nickname("sesoon")
                 .isAdult(true)
                 .build();
+
         userMapper.insertUser(user);
     }
 }
