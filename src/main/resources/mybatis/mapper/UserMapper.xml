@@ -24,4 +24,8 @@
     SELECT * FROM user WHERE email = #{email}
   </select>
 
+  <delete id="deleteAllUsers">
+    DELETE FROM user
+  </delete>
+
 </mapper>

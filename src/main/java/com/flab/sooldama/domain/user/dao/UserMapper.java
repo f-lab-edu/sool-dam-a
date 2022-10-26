@@ -12,4 +12,6 @@ public interface UserMapper {
     User findUserById(Long id);
 
     User findUserByEmail(String email);
+
+    void deleteAllUsers();
 }
