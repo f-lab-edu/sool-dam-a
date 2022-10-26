@@ -115,17 +115,6 @@ public class UserApiTest {
 
         String content = objectMapper.writeValueAsString(request);
 
-        User registeredUser = User.builder()
-                .id(1L)
-                .email("sehoon@fmail.com")
-                .password("abracadabra")
-                .name("sehoon gim")
-                .phoneNumber("010-1010-1010")
-                .nickname("sesoon")
-                .isAdult(true)
-                .createdAt(LocalDateTime.now())
-                .build();
-
         when(userService.insertUser(any(JoinUserRequest.class))).thenThrow(DuplicateEmailExistsException.class);
 
         // 실행

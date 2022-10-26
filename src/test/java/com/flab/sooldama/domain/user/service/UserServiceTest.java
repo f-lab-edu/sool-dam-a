@@ -63,7 +63,6 @@ class UserServiceTest {
 
         doNothing().when(userMapper).insertUser(any(User.class));
         when(userMapper.findUserById(any(Long.class))).thenReturn((Optional.of(user)));
-        //when(userMapper.findUserByEmail(any(String.class))).thenReturn(Optional.of(user));
         when(userMapper.findUserByEmail(any(String.class))).thenAnswer(new Answer() {
             private int count = 0;
 
