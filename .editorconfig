@@ -1,0 +1,13 @@
+root = true
+
+[*]
+# [encoding-utf8]
+charset = utf-8
+
+[*.java]
+# [indentation-tab]
+indent_style = tab
+
+# [4-spaces-tab]
+indent_size = 4
+tab_width = 4
