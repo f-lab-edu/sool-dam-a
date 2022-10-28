@@ -29,7 +29,7 @@ public class ProductServiceTest {
     @Mock private ProductMapper productMapper;
 
     @Test
-    @DisplayName("제품이 존재할 때 조회 성공 테스트 - offeet, limit에 알맞는 리스트를 반환")
+    @DisplayName("제품이 존재할 때 전체 제품 조회 성공 테스트 - offeet, limit에 알맞는 리스트를 반환")
     public void getProductsTest() {
 
         // given
@@ -49,19 +49,19 @@ public class ProductServiceTest {
                             .capacity(350)
                             .build());
         }
-        when(productMapper.selectProducts(offset, limit)).thenReturn(products);
+        when(productMapper.selectProducts(offset, limit, null)).thenReturn(products);
 
         // when
-        List<ProductResponse> productsResponse = productService.getProducts(offset, limit);
+        List<ProductResponse> productsResponse = productService.getProducts(offset, limit, null);
 
         // then
-        verify(productMapper).selectProducts(offset, limit);
+        verify(productMapper).selectProducts(offset, limit, null);
         assertEquals(limit - offset, productsResponse.size());
         assertFalse(productsResponse.isEmpty());
     }
 
     @Test
-    @DisplayName("제품이 존재하지 않을 때 조회 성공 테스트 - 비어있는 리스트를 반환")
+    @DisplayName("제품이 존재하지 않을 때 전체 제품 조회 성공 테스트 - 비어있는 리스트를 반환")
     public void getProductsEmptyTest() {
 
         // given
@@ -69,13 +69,13 @@ public class ProductServiceTest {
         int limit = 5;
 
         List<Product> products = new ArrayList<>();
-        when(productMapper.selectProducts(offset, limit)).thenReturn(products);
+        when(productMapper.selectProducts(offset, limit, null)).thenReturn(products);
 
         // when
-        List<ProductResponse> productsResponse = productService.getProducts(offset, limit);
+        List<ProductResponse> productsResponse = productService.getProducts(offset, limit, null);
 
         // then
-        verify(productMapper).selectProducts(offset, limit);
+        verify(productMapper).selectProducts(offset, limit, null);
         assertTrue(productsResponse.isEmpty());
     }
 
@@ -101,15 +101,15 @@ public class ProductServiceTest {
                             .capacity(350)
                             .build());
         }
-        when(productMapper.selectProductsByCategoryId(offset, limit, categoryId))
+        when(productMapper.selectProducts(offset, limit, categoryId))
                 .thenReturn(products);
 
         // when
         List<ProductResponse> productsResponse =
-                productService.getProductsByCategoryId(offset, limit, categoryId);
+                productService.getProducts(offset, limit, categoryId);
 
         // then
-        verify(productMapper).selectProductsByCategoryId(offset, limit, categoryId);
+        verify(productMapper).selectProducts(offset, limit, categoryId);
         assertEquals(limit - offset, productsResponse.size());
         assertFalse(productsResponse.isEmpty());
 
@@ -128,15 +128,15 @@ public class ProductServiceTest {
         long categoryId = 1L;
 
         List<Product> products = new ArrayList<>();
-        when(productMapper.selectProductsByCategoryId(offset, limit, categoryId))
+        when(productMapper.selectProducts(offset, limit, categoryId))
                 .thenReturn(products);
 
         // when
         List<ProductResponse> productsResponse =
-                productService.getProductsByCategoryId(offset, limit, categoryId);
+                productService.getProducts(offset, limit, categoryId);
 
         // then
-        verify(productMapper).selectProductsByCategoryId(offset, limit, categoryId);
+        verify(productMapper).selectProducts(offset, limit, categoryId);
         assertTrue(productsResponse.isEmpty());
     }
 }

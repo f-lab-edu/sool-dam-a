@@ -38,9 +38,7 @@ public class ProductApi {
             @RequestParam(required = false) Long categoryId) {
 
         List<ProductResponse> productsResponse =
-                (categoryId == null)
-                        ? productService.getProducts(offset, limit)
-                        : productService.getProductsByCategoryId(offset, limit, categoryId);
+                productService.getProducts(offset, limit, categoryId);
 
         return ResponseEntity.ok().body(productsResponse);
     }
