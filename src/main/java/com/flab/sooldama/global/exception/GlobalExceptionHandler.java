@@ -1,12 +1,14 @@
 package com.flab.sooldama.global.exception;
 
-import javax.validation.ConstraintViolationException;
-import lombok.extern.slf4j.Slf4j;
+import com.flab.sooldama.domain.user.exception.DuplicateEmailExistsException;
+import com.flab.sooldama.domain.user.exception.NoSuchUserException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import javax.validation.ConstraintViolationException;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity.BodyBuilder;
 
 /*
 @Slf4j 어노테이션은 Lombok 어노테이션중 하나로, 좀 더 편리하게 로그를 찍을 수 있게 도와줍니다.
@@ -24,12 +26,23 @@ slf4j를 의존하는 클라이언트 코드에서는 실제 구현을 몰라도
 5. ControllerAdvice의 ExceptionHandler 메소드를 invoke 하여 예외를 반환합니다. 이 때 리플렉션 API를 이용해서
 ExceptionHandler의 구현 메소드를 호출해 처리한 에러를 반환하게 됩니다.
  */
-
 @ControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(ConstraintViolationException.class)
+	@ExceptionHandler(DuplicateEmailExistsException.class)
+	public ResponseEntity<HttpStatus> handleDuplicateEmailExistsException(
+		DuplicateEmailExistsException e) {
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+	}
+
+	@ExceptionHandler(NoSuchUserException.class)
+	public ResponseEntity<HttpStatus> handleNoSuchUserException(
+		NoSuchUserException e) {
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+	}
+
+	@ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<BodyBuilder> constraintViolationException(ConstraintViolationException e) {
         log.error(e.getMessage(), e);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

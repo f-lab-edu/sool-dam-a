@@ -7,7 +7,25 @@
 
   <insert id="insertUser" parameterType="com.flab.sooldama.domain.user.domain.User"
     keyProperty="id" useGeneratedKeys="true">
-    <!-- 이곳에 쿼리 작성 -->
+    <!-- useGeneratedKeys: DB 안에서 만들어낸 키(ex. RDBMS의 자동 증가 필드)를 받는 JDBC getGeneratedKeys 메소드를
+    사용하도록 설정한다. 기본값은 false이고, insert, update에만 적용된다. -->
+    <!-- keyProperty: getGeneratedKeys에 의해 리턴된 키를 세팅할 프로퍼티를 지정한다. -->
+    INSERT INTO user
+    (email, password, name, phone_number, nickname, is_adult)
+    VALUES
+    (#{email}, #{password}, #{name}, #{phoneNumber}, #{nickname}, #{isAdult})
   </insert>
+
+  <select id="findUserById" parameterType="Long" resultType="com.flab.sooldama.domain.user.domain.User">
+    SELECT * FROM user WHERE ID = #{id}
+  </select>
+
+  <select id="findUserByEmail" parameterType="String" resultType="com.flab.sooldama.domain.user.domain.User">
+    SELECT * FROM user WHERE email = #{email}
+  </select>
+
+  <delete id="deleteAllUsers">
+    DELETE FROM user
+  </delete>
 
 </mapper>
