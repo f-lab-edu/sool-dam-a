@@ -90,7 +90,7 @@ class UserServiceTest {
     public void findUserWithNonExistingId() {
         // 테스트 데이터 및 동작 정의
         Long wrongId = -1L;
-        when(userMapper.findUserById(wrongId)).thenThrow(NoSuchUserException.class);
+		when(userMapper.findUserById(wrongId)).thenReturn(Optional.ofNullable(null));
 
         // 실행
         assertThrows(NoSuchUserException.class, () -> {
@@ -114,7 +114,7 @@ class UserServiceTest {
                 .isAdult(true)
                 .build();
 
-        when(userMapper.findUserByEmail(any(String.class))).thenThrow(DuplicateEmailExistsException.class);
+		when(userMapper.findUserByEmail(any(String.class))).thenReturn(Optional.of(request.toUser()));
 
         // 실행
         assertThrows(DuplicateEmailExistsException.class, () -> {
