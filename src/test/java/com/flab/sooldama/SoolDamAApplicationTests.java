@@ -7,15 +7,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class SoolDamAApplicationTests {
 
-    /*
-    @Test 어노테이션은 테스트를 수행하는 메소드라는 것을 알려줍니다.
-    JUnit 은 각각의 테스트가 서로 영향을 주지 않고 독립적으로 실행됨을 원칙으로 @Test 마다 객체를 생성합니다.
-     */
-    @Test
-    void contextLoads() {}
+	/*
+	@Test 어노테이션은 테스트를 수행하는 메소드라는 것을 알려줍니다.
+	JUnit 은 각각의 테스트가 서로 영향을 주지 않고 독립적으로 실행됨을 원칙으로 @Test 마다 객체를 생성합니다.
+	 */
+	@Test
+	void contextLoads() {
+	}
 
-    @Test
-    public void main() {
-        SoolDamAApplication.main(new String[] {});
-    }
+	@Test
+	public void main() {
+		SoolDamAApplication.main(new String[]{});
+	}
 }

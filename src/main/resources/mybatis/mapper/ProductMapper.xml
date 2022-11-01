@@ -7,16 +7,16 @@
 
   <select id="selectProducts" resultType="com.flab.sooldama.domain.product.domain.Product">
     SELECT id,
-      product_category_id,
-      name,
-      price,
-      image_url,
-      description,
-      abv,
-      capacity,
-      created_at,
-      updated_at,
-      deleted_at
+    product_category_id,
+    name,
+    price,
+    image_url,
+    description,
+    abv,
+    capacity,
+    created_at,
+    updated_at,
+    deleted_at
     FROM product
     WHERE deleted_at IS NULL
     <if test="categoryId != null">

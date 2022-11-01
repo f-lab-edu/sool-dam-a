@@ -8,14 +8,14 @@ import lombok.Getter;
 @Builder
 public class JoinUserResponse {
 
-    private Long id;
-    private String email;
-    private String password;
-    private String name;
-    private String phoneNumber;
-    private String nickname;
-    private boolean isAdult;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-    private LocalDateTime deletedAt;
+	private Long id;
+	private String email;
+	private String password;
+	private String name;
+	private String phoneNumber;
+	private String nickname;
+	private boolean isAdult;
+	private LocalDateTime createdAt;
+	private LocalDateTime updatedAt;
+	private LocalDateTime deletedAt;
 }

@@ -19,28 +19,28 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class JoinUserRequest {
 
-    @NotNull
-    @Email(regexp = "^[A-Za-z][A-Za-z0-9.-_]+@[A-Za-z0-9.-_]+.[A-Za-z]+", message = "이메일 형식에 맞지 않습니다")
-    private String email;
-    @NotNull
-    private String password;
-    @NotNull
-    private String name;
-    @NotNull
-    private String phoneNumber;
-    private String nickname;
-    @NotNull
-    private boolean isAdult;
+	@NotNull
+	@Email(regexp = "^[A-Za-z][A-Za-z0-9.-_]+@[A-Za-z0-9.-_]+.[A-Za-z]+", message = "이메일 형식에 맞지 않습니다")
+	private String email;
+	@NotNull
+	private String password;
+	@NotNull
+	private String name;
+	@NotNull
+	private String phoneNumber;
+	private String nickname;
+	@NotNull
+	private boolean isAdult;
 
-    public User toUser() {
-        return User.builder()
-                .email(this.getEmail())
-                .password(this.getPassword())
-                .name(this.getName())
-                .phoneNumber(this.getPhoneNumber())
-                .nickname(this.getNickname())
-                .isAdult(this.isAdult())
-                .build();
-    }
+	public User toUser() {
+		return User.builder()
+			.email(this.getEmail())
+			.password(this.getPassword())
+			.name(this.getName())
+			.phoneNumber(this.getPhoneNumber())
+			.nickname(this.getNickname())
+			.isAdult(this.isAdult())
+			.build();
+	}
 
 }

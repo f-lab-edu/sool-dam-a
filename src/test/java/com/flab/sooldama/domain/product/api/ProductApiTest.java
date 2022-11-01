@@ -13,25 +13,26 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(ProductApi.class)
 public class ProductApiTest {
-    @Autowired
-    MockMvc mockMvc;
 
-    @MockBean
-    ProductService productService;
+	@Autowired
+	MockMvc mockMvc;
 
-    @Test
-    @DisplayName("제품 조회 성공 테스트")
-    public void getProductsTest() throws Exception {
-        this.mockMvc
-                .perform(get("/products"))
-                .andExpect(status().isOk());
-    }
+	@MockBean
+	ProductService productService;
 
-    @Test
-    @DisplayName("offset이 0 이하일 때 제품 조회 실패")
-    public void getProductsFailTest() throws Exception {
-        this.mockMvc
-                .perform(get("/products?offset=-1"))
-                .andExpect(status().isBadRequest());
-    }
+	@Test
+	@DisplayName("제품 조회 성공 테스트")
+	public void getProductsTest() throws Exception {
+		this.mockMvc
+			.perform(get("/products"))
+			.andExpect(status().isOk());
+	}
+
+	@Test
+	@DisplayName("offset이 0 이하일 때 제품 조회 실패")
+	public void getProductsFailTest() throws Exception {
+		this.mockMvc
+			.perform(get("/products?offset=-1"))
+			.andExpect(status().isBadRequest());
+	}
 }
