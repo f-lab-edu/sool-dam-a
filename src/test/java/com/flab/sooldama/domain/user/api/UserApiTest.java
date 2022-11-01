@@ -43,7 +43,7 @@ import org.springframework.test.web.servlet.MockMvc;
  * @MockBean 어노테이션은 @WebMvcTest 가 붙은 테스트 클래스에서 모의 객체로 사용할 요소에 붙입니다. 그러면 이 모의 객체가
  * 의존성으로 설정됩니다.
  */
-@WebMvcTest
+@WebMvcTest(controllers = UserApi.class)
 public class UserApiTest {
 
     @Autowired
