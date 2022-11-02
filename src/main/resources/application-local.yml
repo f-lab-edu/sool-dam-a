@@ -1,7 +1,8 @@
 # Spring
 spring:
-  profiles:
-    active: local
+  config:
+    activate:
+      on-profile: local
   datasource:
     url: jdbc:mysql://${MYSQL_URL}:${MYSQL_PORT}/${MYSQL_DBNAME}?serverTimezone=UTC&characterEncoding=UTF-8
     username: ${MYSQL_USERNAME}

@@ -10,14 +10,14 @@ import lombok.Getter;
 @AllArgsConstructor // 해당 객체 내에 있는 모든 변수를 인수로 받는 생성자를 만들어주는 lombok 의 어노테이션 입니다.
 public class User {
 
-    private Long id;
-    private String email;
-    private String password;
-    private String name;
-    private String phoneNumber;
-    private String nickname;
-    private boolean isAdult;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-    private LocalDateTime deletedAt;
+	private Long id;
+	private String email;
+	private String password;
+	private String name;
+	private String phoneNumber;
+	private String nickname;
+	private boolean isAdult;
+	private LocalDateTime createdAt;
+	private LocalDateTime updatedAt;
+	private LocalDateTime deletedAt;
 }

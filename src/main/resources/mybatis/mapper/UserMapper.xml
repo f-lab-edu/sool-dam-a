@@ -16,11 +16,13 @@
     (#{email}, #{password}, #{name}, #{phoneNumber}, #{nickname}, #{isAdult})
   </insert>
 
-  <select id="findUserById" parameterType="Long" resultType="com.flab.sooldama.domain.user.domain.User">
+  <select id="findUserById" parameterType="Long"
+    resultType="com.flab.sooldama.domain.user.domain.User">
     SELECT * FROM user WHERE ID = #{id}
   </select>
 
-  <select id="findUserByEmail" parameterType="String" resultType="com.flab.sooldama.domain.user.domain.User">
+  <select id="findUserByEmail" parameterType="String"
+    resultType="com.flab.sooldama.domain.user.domain.User">
     SELECT * FROM user WHERE email = #{email}
   </select>
 

@@ -20,123 +20,125 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class ProductServiceTest {
 
-    /*
-    @InjectMocks, @Mock 어노테이션
-    @Mock 으로 mock 객체를 생성하여, @InjectMocks 가 붙은 객체에 주입시킵니다.
-    @InjectMocks(Service) @Mock(DAO) 를 활용하여 Service 테스트 목객체에 DAO 목객체를 주입시킵니다.
-     */
-    @InjectMocks ProductService productService;
-    @Mock private ProductMapper productMapper;
+	/*
+	@InjectMocks, @Mock 어노테이션
+	@Mock 으로 mock 객체를 생성하여, @InjectMocks 가 붙은 객체에 주입시킵니다.
+	@InjectMocks(Service) @Mock(DAO) 를 활용하여 Service 테스트 목객체에 DAO 목객체를 주입시킵니다.
+	 */
+	@InjectMocks
+	ProductService productService;
+	@Mock
+	private ProductMapper productMapper;
 
-    @Test
-    @DisplayName("제품이 존재할 때 전체 제품 조회 성공 테스트 - offeet, limit에 알맞는 리스트를 반환")
-    public void getProductsTest() {
+	@Test
+	@DisplayName("제품이 존재할 때 전체 제품 조회 성공 테스트 - offeet, limit에 알맞는 리스트를 반환")
+	public void getProductsTest() {
 
-        // given
-        int offset = 0;
-        int limit = 5;
+		// given
+		int offset = 0;
+		int limit = 5;
 
-        List<Product> products = new ArrayList<>();
-        for (int i = offset; i < limit; i++) {
-            products.add(
-                    Product.builder()
-                            .productCategoryId(1L)
-                            .name("test")
-                            .price(1000)
-                            .imageUrl("test")
-                            .description("test")
-                            .abv(1.0)
-                            .capacity(350)
-                            .build());
-        }
-        when(productMapper.selectProducts(offset, limit, null)).thenReturn(products);
+		List<Product> products = new ArrayList<>();
+		for (int i = offset; i < limit; i++) {
+			products.add(
+				Product.builder()
+					.productCategoryId(1L)
+					.name("test")
+					.price(1000)
+					.imageUrl("test")
+					.description("test")
+					.abv(1.0)
+					.capacity(350)
+					.build());
+		}
+		when(productMapper.selectProducts(offset, limit, null)).thenReturn(products);
 
-        // when
-        List<ProductResponse> productsResponse = productService.getProducts(offset, limit, null);
+		// when
+		List<ProductResponse> productsResponse = productService.getProducts(offset, limit, null);
 
-        // then
-        verify(productMapper).selectProducts(offset, limit, null);
-        assertEquals(limit - offset, productsResponse.size());
-        assertFalse(productsResponse.isEmpty());
-    }
+		// then
+		verify(productMapper).selectProducts(offset, limit, null);
+		assertEquals(limit - offset, productsResponse.size());
+		assertFalse(productsResponse.isEmpty());
+	}
 
-    @Test
-    @DisplayName("제품이 존재하지 않을 때 전체 제품 조회 성공 테스트 - 비어있는 리스트를 반환")
-    public void getProductsEmptyTest() {
+	@Test
+	@DisplayName("제품이 존재하지 않을 때 전체 제품 조회 성공 테스트 - 비어있는 리스트를 반환")
+	public void getProductsEmptyTest() {
 
-        // given
-        int offset = 0;
-        int limit = 5;
+		// given
+		int offset = 0;
+		int limit = 5;
 
-        List<Product> products = new ArrayList<>();
-        when(productMapper.selectProducts(offset, limit, null)).thenReturn(products);
+		List<Product> products = new ArrayList<>();
+		when(productMapper.selectProducts(offset, limit, null)).thenReturn(products);
 
-        // when
-        List<ProductResponse> productsResponse = productService.getProducts(offset, limit, null);
+		// when
+		List<ProductResponse> productsResponse = productService.getProducts(offset, limit, null);
 
-        // then
-        verify(productMapper).selectProducts(offset, limit, null);
-        assertTrue(productsResponse.isEmpty());
-    }
+		// then
+		verify(productMapper).selectProducts(offset, limit, null);
+		assertTrue(productsResponse.isEmpty());
+	}
 
-    @Test
-    @DisplayName("카테고리별 제품이 존재할 때 조회 성공 테스트 - offeet, limit, categoryId에 알맞는 리스트를 반환")
-    public void getProductsByCategoryIdTest() {
+	@Test
+	@DisplayName("카테고리별 제품이 존재할 때 조회 성공 테스트 - offeet, limit, categoryId에 알맞는 리스트를 반환")
+	public void getProductsByCategoryIdTest() {
 
-        // given
-        int offset = 0;
-        int limit = 5;
-        long categoryId = 1L;
+		// given
+		int offset = 0;
+		int limit = 5;
+		long categoryId = 1L;
 
-        List<Product> products = new ArrayList<>();
-        for (int i = offset; i < limit; i++) {
-            products.add(
-                    Product.builder()
-                            .productCategoryId(categoryId)
-                            .name("test")
-                            .price(1000)
-                            .imageUrl("test")
-                            .description("test")
-                            .abv(1.0)
-                            .capacity(350)
-                            .build());
-        }
-        when(productMapper.selectProducts(offset, limit, categoryId))
-                .thenReturn(products);
+		List<Product> products = new ArrayList<>();
+		for (int i = offset; i < limit; i++) {
+			products.add(
+				Product.builder()
+					.productCategoryId(categoryId)
+					.name("test")
+					.price(1000)
+					.imageUrl("test")
+					.description("test")
+					.abv(1.0)
+					.capacity(350)
+					.build());
+		}
+		when(productMapper.selectProducts(offset, limit, categoryId))
+			.thenReturn(products);
 
-        // when
-        List<ProductResponse> productsResponse =
-                productService.getProducts(offset, limit, categoryId);
+		// when
+		List<ProductResponse> productsResponse =
+			productService.getProducts(offset, limit, categoryId);
 
-        // then
-        verify(productMapper).selectProducts(offset, limit, categoryId);
-        assertEquals(limit - offset, productsResponse.size());
-        assertFalse(productsResponse.isEmpty());
+		// then
+		verify(productMapper).selectProducts(offset, limit, categoryId);
+		assertEquals(limit - offset, productsResponse.size());
+		assertFalse(productsResponse.isEmpty());
 
-        for (Product product : products) {
-            assertEquals(categoryId, product.getProductCategoryId());
-        }
-    }
+		for (Product product : products) {
+			assertEquals(categoryId, product.getProductCategoryId());
+		}
+	}
 
-    @Test
-    @DisplayName("카테고리별 제품이 존재하지 않을 때 조회 성공 테스트 - 비어있는 리스트를 반환")
-    public void getProductsByCategoryIdEmptyTest() {
+	@Test
+	@DisplayName("카테고리별 제품이 존재하지 않을 때 조회 성공 테스트 - 비어있는 리스트를 반환")
+	public void getProductsByCategoryIdEmptyTest() {
 
-        // given
-        int offset = 0;
-        int limit = 5;
-        long categoryId = 1L;
+		// given
+		int offset = 0;
+		int limit = 5;
+		long categoryId = 1L;
 
-        List<Product> products = new ArrayList<>();
-        when(productMapper.selectProducts(offset, limit, categoryId))
-                .thenReturn(products);
+		List<Product> products = new ArrayList<>();
+		when(productMapper.selectProducts(offset, limit, categoryId))
+			.thenReturn(products);
 
-        // when
-        List<ProductResponse> productsResponse =
-                productService.getProducts(offset, limit, categoryId);
+		// when
+		List<ProductResponse> productsResponse =
+			productService.getProducts(offset, limit, categoryId);
 
-        // then
-        verify(productMapper).selectProducts(offset, limit, categoryId);
-        assertTrue(productsResponse.isEmpty());
-    }
+		// then
+		verify(productMapper).selectProducts(offset, limit, categoryId);
+		assertTrue(productsResponse.isEmpty());
+	}
 }

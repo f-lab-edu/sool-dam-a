@@ -43,8 +43,9 @@ public class GlobalExceptionHandler {
 	}
 
 	@ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<BodyBuilder> constraintViolationException(ConstraintViolationException e) {
-        log.error(e.getMessage(), e);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-    }
+	public ResponseEntity<BodyBuilder> constraintViolationException(
+		ConstraintViolationException e) {
+		log.error(e.getMessage(), e);
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+	}
 }
