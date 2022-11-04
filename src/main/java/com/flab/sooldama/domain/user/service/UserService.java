@@ -3,10 +3,13 @@ package com.flab.sooldama.domain.user.service;
 import com.flab.sooldama.domain.user.dao.UserMapper;
 import com.flab.sooldama.domain.user.domain.User;
 import com.flab.sooldama.domain.user.dto.request.JoinUserRequest;
+import com.flab.sooldama.domain.user.dto.request.LoginUserRequest;
 import com.flab.sooldama.domain.user.dto.response.JoinUserResponse;
 import com.flab.sooldama.domain.user.exception.NoSuchUserException;
 import com.flab.sooldama.domain.user.exception.DuplicateEmailExistsException;
+import com.flab.sooldama.domain.user.exception.PasswordNotMatchException;
 import java.util.Optional;
+import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -56,5 +59,17 @@ public class UserService {
 			.updatedAt(matchedUser.getUpdatedAt())
 			.deletedAt(matchedUser.getDeletedAt())
 			.build();
+	}
+
+	public void loginUser(LoginUserRequest request, HttpSession session) {
+		User user = userMapper.findUserByEmail(request.getEmail()).orElseThrow(() -> {
+			throw new NoSuchUserException("등록된 사용자가 아닙니다");
+		});
+
+		if (!request.getPassword().equals(user.getPassword())) {
+			throw new PasswordNotMatchException("비밀번호가 다릅니다");
+		}
+
+		session.setAttribute("user", request);
 	}
 }
