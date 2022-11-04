@@ -1,6 +1,8 @@
 package com.flab.sooldama.domain.user.api;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -12,11 +14,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flab.sooldama.domain.user.domain.User;
 import com.flab.sooldama.domain.user.dto.request.JoinUserRequest;
+import com.flab.sooldama.domain.user.dto.request.LoginUserRequest;
 import com.flab.sooldama.domain.user.exception.DuplicateEmailExistsException;
+import com.flab.sooldama.domain.user.exception.NoSuchUserException;
 import com.flab.sooldama.domain.user.service.UserService;
 import java.time.LocalDateTime;
 import java.util.Iterator;
 import java.util.Set;
+import javax.servlet.http.HttpSession;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import org.assertj.core.api.Assertions;
@@ -27,6 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 
 /**
@@ -151,4 +157,36 @@ public class UserApiTest {
 			Assertions.assertThat(next.getMessage()).contains(messageForInvalidEmail);
 		}
 	}
+
+	@Test
+	@DisplayName("회원가입되지 않은 이메일로 로그인 시 로그인 실패")
+	public void loginFailIdNotFound() throws Exception {
+		// 테스트 데이터 및 동작 정의
+		LoginUserRequest invalidRequest = LoginUserRequest.builder()
+			.email("yet-joined@fmail.com")
+			.password("q1w2e3!")
+			.build();
+
+		String content = objectMapper.writeValueAsString(invalidRequest);
+		MockHttpSession session = new MockHttpSession();
+
+		doThrow(NoSuchUserException.class).when(userService).loginUser(any(LoginUserRequest.class), any(HttpSession.class));
+
+		// 실행
+		mockMvc.perform(post("/users/login")
+			.content(content)
+			.session(session)
+			.contentType(MediaType.APPLICATION_JSON)
+			.accept(MediaType.APPLICATION_JSON))
+			.andDo(print())
+			.andExpect(status().isBadRequest());
+
+		// 행위 검증
+		assertThrows(NoSuchUserException.class, () -> {
+			userService.loginUser(invalidRequest, session);
+		});
+
+		verify(userService, times(2)).loginUser(any(LoginUserRequest.class), any(HttpSession.class));
+	}
+
 }
