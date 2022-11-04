@@ -8,7 +8,6 @@ import com.flab.sooldama.domain.user.dto.response.JoinUserResponse;
 import com.flab.sooldama.domain.user.exception.NoSuchUserException;
 import com.flab.sooldama.domain.user.exception.DuplicateEmailExistsException;
 import com.flab.sooldama.domain.user.exception.PasswordNotMatchException;
-import java.util.Optional;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
