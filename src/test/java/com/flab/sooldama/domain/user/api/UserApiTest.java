@@ -2,6 +2,7 @@ package com.flab.sooldama.domain.user.api;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -219,6 +220,34 @@ public class UserApiTest {
 		});
 
 		verify(userService, times(2)).loginUser(any(LoginUserRequest.class),
+			any(HttpSession.class));
+	}
+
+	@Test
+	@DisplayName("로그인 성공 테스트")
+	public void loginSuccess() throws Exception {
+		// 테스트 데이터 및 동작 정의
+		LoginUserRequest validRequest = LoginUserRequest.builder()
+			.email("joined@fmail.com")
+			.password("q1w2e3!")
+			.build();
+
+		String content = objectMapper.writeValueAsString(validRequest);
+		MockHttpSession session = new MockHttpSession();
+
+		doNothing().when(userService).loginUser(any(LoginUserRequest.class), any(HttpSession.class));
+
+		// 실행
+		mockMvc.perform(post("/users/login")
+				.content(content)
+				.session(session)
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON))
+			.andDo(print())
+			.andExpect(status().isOk());
+
+		// 행위 검증
+		verify(userService, times(1)).loginUser(any(LoginUserRequest.class),
 			any(HttpSession.class));
 	}
 }
