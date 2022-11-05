@@ -15,6 +15,7 @@ import com.flab.sooldama.domain.user.dto.request.JoinUserRequest;
 import com.flab.sooldama.domain.user.dto.request.LoginUserRequest;
 import com.flab.sooldama.domain.user.exception.DuplicateEmailExistsException;
 import com.flab.sooldama.domain.user.exception.NoSuchUserException;
+import com.flab.sooldama.domain.user.exception.PasswordNotMatchException;
 import com.flab.sooldama.domain.user.service.UserService;
 import java.util.Iterator;
 import java.util.Set;
@@ -186,4 +187,36 @@ public class UserApiTest {
 		verify(userService, times(2)).loginUser(any(LoginUserRequest.class), any(HttpSession.class));
 	}
 
+	@Test
+	@DisplayName("등록된 사용자이더라도 비밀번호 틀리면 로그인 불가")
+	public void loginFailPasswordNotMatch() throws Exception {
+		// 테스트 데이터 및 동작 정의
+		LoginUserRequest invalidRequest = LoginUserRequest.builder()
+			.email("joined@fmail.com")
+			.password("q1w2e3!")
+			.build();
+
+		String content = objectMapper.writeValueAsString(invalidRequest);
+		MockHttpSession session = new MockHttpSession();
+
+		doThrow(PasswordNotMatchException.class).when(userService)
+			.loginUser(any(LoginUserRequest.class), any(HttpSession.class));
+
+		// 실행
+		mockMvc.perform(post("/users/login")
+				.content(content)
+				.session(session)
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON))
+			.andDo(print())
+			.andExpect(status().isBadRequest());
+
+		// 행위 검증
+		assertThrows(PasswordNotMatchException.class, () -> {
+			userService.loginUser(invalidRequest, session);
+		});
+
+		verify(userService, times(2)).loginUser(any(LoginUserRequest.class),
+			any(HttpSession.class));
+	}
 }
