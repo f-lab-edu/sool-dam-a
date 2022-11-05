@@ -158,7 +158,7 @@ public class UserApiTest {
 
 	@Test
 	@DisplayName("회원가입되지 않은 이메일로 로그인 시 로그인 실패")
-	public void loginFailIdNotFound() throws Exception {
+	public void loginFailEmailNotFound() throws Exception {
 		// 테스트 데이터 및 동작 정의
 		LoginUserRequest invalidRequest = LoginUserRequest.builder()
 			.email("yet-joined@fmail.com")
