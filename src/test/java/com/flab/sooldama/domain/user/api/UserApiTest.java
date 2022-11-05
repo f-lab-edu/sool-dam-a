@@ -168,14 +168,15 @@ public class UserApiTest {
 		String content = objectMapper.writeValueAsString(invalidRequest);
 		MockHttpSession session = new MockHttpSession();
 
-		doThrow(NoSuchUserException.class).when(userService).loginUser(any(LoginUserRequest.class), any(HttpSession.class));
+		doThrow(NoSuchUserException.class).when(userService)
+			.loginUser(any(LoginUserRequest.class), any(HttpSession.class));
 
 		// 실행
 		mockMvc.perform(post("/users/login")
-			.content(content)
-			.session(session)
-			.contentType(MediaType.APPLICATION_JSON)
-			.accept(MediaType.APPLICATION_JSON))
+				.content(content)
+				.session(session)
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON))
 			.andDo(print())
 			.andExpect(status().isBadRequest());
 
@@ -184,7 +185,8 @@ public class UserApiTest {
 			userService.loginUser(invalidRequest, session);
 		});
 
-		verify(userService, times(2)).loginUser(any(LoginUserRequest.class), any(HttpSession.class));
+		verify(userService, times(2)).loginUser(any(LoginUserRequest.class),
+			any(HttpSession.class));
 	}
 
 	@Test
