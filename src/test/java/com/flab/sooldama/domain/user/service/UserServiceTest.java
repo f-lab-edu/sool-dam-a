@@ -175,4 +175,33 @@ class UserServiceTest {
 		verify(userService, times(1)).loginUser(any(LoginUserRequest.class),
 			any(HttpSession.class));
 	}
+
+	@Test
+	@DisplayName("로그인 성공 테스트")
+	public void loginSuccess() {
+		// 테스트 데이터 및 동작 정의
+		LoginUserRequest validRequest = LoginUserRequest.builder()
+			.email("joined@fmail.com")
+			.password("q1w2e3!")
+			.build();
+		User validUser = User.builder()
+			.email("joined@fmail.com")
+			.password("q1w2e3!")
+			.name("joined")
+			.phoneNumber("010-1010-1010")
+			.nickname("joi")
+			.isAdult(true)
+			.createdAt(LocalDateTime.now())
+			.build();
+
+		MockHttpSession session = new MockHttpSession();
+
+		when(userMapper.findUserByEmail(any(String.class))).thenReturn(Optional.of(validUser));
+
+		// 실행
+		userService.loginUser(validRequest, session);
+
+		// 행위 검증
+		verify(userMapper).findUserByEmail(any(String.class));
+	}
 }
