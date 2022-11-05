@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
 	private final UserMapper userMapper;
+	private static final String USER_EMAIL = "USER_EMAIL";
 
 	public JoinUserResponse insertUser(JoinUserRequest request) {
 		userMapper.findUserByEmail(request.getEmail()).ifPresent(user -> {
@@ -69,6 +70,6 @@ public class UserService {
 			throw new PasswordNotMatchException("비밀번호가 다릅니다");
 		}
 
-		session.setAttribute("user", request);
+		session.setAttribute(USER_EMAIL, request.getEmail());
 	}
 }
