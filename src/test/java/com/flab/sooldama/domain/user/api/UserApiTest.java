@@ -235,7 +235,8 @@ public class UserApiTest {
 		String content = objectMapper.writeValueAsString(validRequest);
 		MockHttpSession session = new MockHttpSession();
 
-		doNothing().when(userService).loginUser(any(LoginUserRequest.class), any(HttpSession.class));
+		doNothing().when(userService)
+			.loginUser(any(LoginUserRequest.class), any(HttpSession.class));
 
 		// 실행
 		mockMvc.perform(post("/users/login")
