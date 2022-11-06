@@ -159,12 +159,20 @@ class UserServiceTest {
 		// 테스트 데이터 및 동작 정의
 		LoginUserRequest invalidRequest = LoginUserRequest.builder()
 			.email("joined@fmail.com")
+			.password("cant-remember!")
+			.build();
+		User validUser = User.builder()
+			.email("joined@fmail.com")
 			.password("q1w2e3!")
+			.name("joined")
+			.phoneNumber("010-1010-1010")
+			.nickname("joi")
+			.isAdult(true)
+			.createdAt(LocalDateTime.now())
 			.build();
 		MockHttpSession session = new MockHttpSession();
 
-		doThrow(PasswordNotMatchException.class).when(userService)
-			.loginUser(any(LoginUserRequest.class), any(MockHttpSession.class));
+		when(userMapper.findUserByEmail(any(String.class))).thenReturn(Optional.of(validUser));
 
 		// 실행
 		assertThrows(PasswordNotMatchException.class, () -> {
@@ -172,8 +180,7 @@ class UserServiceTest {
 		});
 
 		// 행위 검증
-		verify(userService, times(1)).loginUser(any(LoginUserRequest.class),
-			any(HttpSession.class));
+		verify(userMapper, times(1)).findUserByEmail(any(String.class));
 	}
 
 	@Test
