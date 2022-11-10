@@ -32,19 +32,19 @@ ExceptionHandler의 구현 메소드를 호출해 처리한 에러를 반환하�
 public class GlobalExceptionHandler {
 
 	@ExceptionHandler(DuplicateEmailExistsException.class)
-	public ResponseEntity<HttpStatus> handleDuplicateEmailExistsException(
+	public ResponseEntity<Void> handleDuplicateEmailExistsException(
 		DuplicateEmailExistsException e) {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 	}
 
 	@ExceptionHandler(NoSuchUserException.class)
-	public ResponseEntity<HttpStatus> handleNoSuchUserException(
+	public ResponseEntity<Void> handleNoSuchUserException(
 		NoSuchUserException e) {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 	}
 
 	@ExceptionHandler(PasswordNotMatchException.class)
-	public ResponseEntity<HttpStatus> handlePasswordNotMatchException(
+	public ResponseEntity<Void> handlePasswordNotMatchException(
 		PasswordNotMatchException e) {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 	}

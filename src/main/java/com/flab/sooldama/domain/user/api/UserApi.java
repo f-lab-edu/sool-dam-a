@@ -48,7 +48,7 @@ public class UserApi {
 	}
 
 	@PostMapping(path = "/login")
-	public ResponseEntity<HttpStatus> loginUser(@RequestBody LoginUserRequest request, HttpSession session) {
+	public ResponseEntity<Void> loginUser(@RequestBody LoginUserRequest request, HttpSession session) {
 		userService.loginUser(request, session);
 
 		return ResponseEntity.status(HttpStatus.OK).build();
