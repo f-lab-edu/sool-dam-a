@@ -18,12 +18,19 @@
 
   <select id="findUserById" parameterType="Long"
     resultType="com.flab.sooldama.domain.user.domain.User">
-    SELECT * FROM user WHERE ID = #{id}
+    SELECT
+    id, email, password, name, phone_number, nickname, is_adult, created_at, updated_at, deleted_at
+    FROM user
+    WHERE ID = #{id}
   </select>
+
 
   <select id="findUserByEmail" parameterType="String"
     resultType="com.flab.sooldama.domain.user.domain.User">
-    SELECT * FROM user WHERE email = #{email}
+    SELECT
+    id, email, password, name, phone_number, nickname, is_adult, created_at, updated_at, deleted_at
+    FROM user
+    WHERE email = #{email}
   </select>
 
   <delete id="deleteAllUsers">
