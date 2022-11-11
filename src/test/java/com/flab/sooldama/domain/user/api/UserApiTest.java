@@ -99,6 +99,36 @@ public class UserApiTest {
 	}
 
 	@Test
+	@DisplayName("이메일이 중복일 경우 bad request status 반환")
+	public void joinWithDuplicationEmailTest() throws Exception {
+		// 테스트 데이터 및 동작 정의
+		JoinUserRequest request = JoinUserRequest.builder()
+			.email("sehoon@fmail.com")
+			.password("abracadabra")
+			.name("sehoon gim")
+			.phoneNumber("010-1010-1010")
+			.nickname("sesoon")
+			.isAdult(true)
+			.build();
+
+		String content = objectMapper.writeValueAsString(request);
+
+		when(userService.insertUser(any(JoinUserRequest.class))).thenThrow(
+			DuplicateEmailExistsException.class);
+
+		// 실행
+		mockMvc.perform(post("/users")
+				.content(content)
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON))
+			.andDo(print())
+			.andExpect(status().isBadRequest());
+
+		// 행위 검증
+		verify(userService, times(1)).insertUser(any(JoinUserRequest.class));
+	}
+
+	@Test
 	@DisplayName("유효하지 않은 이메일 주소일 경우")
 	public void checkInvalidEmail() {
 		String invalidEmail = "sehoon@fmaildotcom";
