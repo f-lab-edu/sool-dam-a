@@ -45,11 +45,8 @@ public class ProductMapperTest {
     public void selectProductByIdTest() {
         Optional<Product> product = productMapper.selectProductById(1L);
 
-        if (product.isPresent()) {
-            assertEquals(1L, product.get().getId());
-        } else {
-            throw new ProductNotFoundException("제품이 존재하지 않습니다.");
-        }
+		assertTrue(product.isPresent());
+		assertEquals(1L, product.get().getId());
     }
 
     @Test
