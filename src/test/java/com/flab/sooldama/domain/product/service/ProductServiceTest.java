@@ -163,8 +163,7 @@ public class ProductServiceTest {
 			.capacity(350)
 			.build();
 
-        when(productMapper.selectProductById(productId))
-			.thenReturn(Optional.ofNullable(product));
+        when(productMapper.selectProductById(productId)).thenReturn(Optional.ofNullable(product));
 
         // when
         ProductResponse productResponse = productService.getProductById(productId);
@@ -181,8 +180,7 @@ public class ProductServiceTest {
 
         // given
         long productId = 1L;
-        when(productMapper.selectProductById(productId))
-			.thenReturn(Optional.empty());
+        when(productMapper.selectProductById(productId)).thenReturn(Optional.empty());
 
         // then
         assertThrows(ProductNotFoundException.class,
