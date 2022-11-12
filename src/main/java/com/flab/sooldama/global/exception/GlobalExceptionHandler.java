@@ -31,26 +31,26 @@ ExceptionHandler의 구현 메소드를 호출해 처리한 에러를 반환하�
 public class GlobalExceptionHandler {
 
 	@ExceptionHandler(DuplicateEmailExistsException.class)
-	public ResponseEntity<HttpStatus> handleDuplicateEmailExistsException(
+	public ResponseEntity<Void> handleDuplicateEmailExistsException(
 		DuplicateEmailExistsException e) {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 	}
 
 	@ExceptionHandler(NoSuchUserException.class)
-	public ResponseEntity<HttpStatus> handleNoSuchUserException(
+	public ResponseEntity<Void> handleNoSuchUserException(
 		NoSuchUserException e) {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 	}
 
 	@ExceptionHandler(ConstraintViolationException.class)
-	public ResponseEntity<HttpStatus> constraintViolationException(
+	public ResponseEntity<Void> constraintViolationException(
 		ConstraintViolationException e) {
 		log.error(e.getMessage(), e);
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 	}
 
     @ExceptionHandler(ProductNotFoundException.class)
-    public ResponseEntity<HttpStatus> productNotFoundException(ProductNotFoundException e) {
+    public ResponseEntity<Void> productNotFoundException(ProductNotFoundException e) {
         log.error(e.getMessage(), e);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
