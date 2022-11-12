@@ -19,17 +19,7 @@ public class ProductService {
 		List<ProductResponse> productResponses = new ArrayList<>();
 
 		for (Product product : products) {
-			productResponses.add(
-				ProductResponse.builder()
-					.id(product.getId())
-					.productCategoryId(product.getProductCategoryId())
-					.name(product.getName())
-					.price(product.getPrice())
-					.imageUrl(product.getImageUrl())
-					.description(product.getDescription())
-					.abv(product.getAbv())
-					.capacity(product.getCapacity())
-					.build());
+			productResponses.add(ProductResponse.of(product));
 		}
 
         return productResponses;
@@ -39,15 +29,6 @@ public class ProductService {
         Product product = productMapper.selectProductById(productId)
 			.orElseThrow(() -> new ProductNotFoundException("제품이 존재하지 않습니다."));
 
-        return ProductResponse.builder()
-			.id(product.getId())
-			.productCategoryId(product.getProductCategoryId())
-			.name(product.getName())
-			.price(product.getPrice())
-			.imageUrl(product.getImageUrl())
-			.description(product.getDescription())
-			.abv(product.getAbv())
-			.capacity(product.getCapacity())
-			.build();
+        return ProductResponse.of(product);
     }
 }
