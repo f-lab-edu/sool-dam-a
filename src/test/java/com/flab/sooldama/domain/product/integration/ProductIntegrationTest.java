@@ -42,4 +42,21 @@ public class ProductIntegrationTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$[0].productCategoryId").value(1));
 	}
+
+    @Test
+    @DisplayName("아이디로 제품 조회 성공")
+    public void getProductTest() throws Exception {
+        this.mockMvc
+			.perform(get("/products/1"))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.id").value(1));
+    }
+
+    @Test
+    @DisplayName("아이디로 제품 조회 실패")
+    public void getProductFailTest() throws Exception {
+        this.mockMvc
+			.perform(get("/products/1000"))
+			.andExpect(status().isNotFound());
+    }
 }

@@ -29,10 +29,18 @@ public class ProductApiTest {
 	}
 
 	@Test
-	@DisplayName("offset이 0 이하일 때 제품 조회 실패")
+	@DisplayName("offset이 0 이하일 때 제품 조회 실패 테스트")
 	public void getProductsFailTest() throws Exception {
 		this.mockMvc
 			.perform(get("/products?offset=-1"))
 			.andExpect(status().isBadRequest());
 	}
+
+    @Test
+    @DisplayName("아이디로 제품 조회 성공 테스트")
+    public void getProductTest() throws Exception {
+        this.mockMvc
+			.perform(get("/products/1"))
+			.andExpect(status().isOk());
+    }
 }

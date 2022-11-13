@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,14 +27,13 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @RequiredArgsConstructor
 public class ProductApi {
+    private final ProductService productService;
 
-	private final ProductService productService;
-
-	/*
-	@RequestParam 어노테이션은 쿼리스트링을 파라미터로 받을 수 있게 도와줍니다.
-	 */
-	@GetMapping("")
-	public ResponseEntity<List<ProductResponse>> getProducts(
+    /*
+    @RequestParam 어노테이션은 쿼리스트링을 파라미터로 받을 수 있게 도와줍니다.
+     */
+    @GetMapping("")
+    public ResponseEntity<List<ProductResponse>> getProducts(
 		@RequestParam(defaultValue = "0") @Min(0) Integer offset,
 		@RequestParam(defaultValue = "20") Integer limit,
 		@RequestParam(required = false) Long categoryId) {
@@ -43,4 +43,14 @@ public class ProductApi {
 
 		return ResponseEntity.ok().body(productsResponse);
 	}
+
+	/*
+	@PathVariable 어노테이션은 Url 파라미터를 사용할 수 있도록 도와줍니다.
+	 */
+    @GetMapping("/{productId}")
+    public ResponseEntity<ProductResponse> getProduct(@PathVariable Long productId) {
+
+        ProductResponse productsResponse = productService.getProductById(productId);
+        return ResponseEntity.ok().body(productsResponse);
+    }
 }
