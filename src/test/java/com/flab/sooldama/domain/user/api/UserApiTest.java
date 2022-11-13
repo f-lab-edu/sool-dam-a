@@ -99,8 +99,8 @@ public class UserApiTest {
 	}
 
 	@Test
-	@DisplayName("이메일이 중복일 경우 bad request status 반환")
-	public void joinWithDuplicationEmailTest() throws Exception {
+	@DisplayName("회원가입 중 예외 발생시 Controller Advice가 처리하는지 확인")
+	public void exceptionHandledByControllerAdviceTest() throws Exception {
 		// 테스트 데이터 및 동작 정의
 		JoinUserRequest request = JoinUserRequest.builder()
 			.email("sehoon@fmail.com")
