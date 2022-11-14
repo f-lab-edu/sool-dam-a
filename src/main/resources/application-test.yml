@@ -11,3 +11,7 @@ spring:
   h2:
     console:
       enabled: true
+  sql:
+    init:
+      platform: h2
+      mode: always
