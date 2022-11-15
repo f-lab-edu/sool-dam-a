@@ -30,3 +30,8 @@ jobs:
         run: ./gradlew clean build -x test
       - name: Test with Gradle
         run: SPRING_PROFILES_ACTIVE=[test] ./gradlew test
+      - name: Generate JaCoCo Badge
+        uses: cicirello/jacoco-badge-generator@v2
+        with:
+          generate-branches-badge: true
+          jacoco-csv-file: build/reports/jacoco/test/jacocoTestReport.csv
