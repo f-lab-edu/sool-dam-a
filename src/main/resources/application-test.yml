@@ -5,6 +5,17 @@ spring:
       on-profile: test
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:testdb;NON_KEYWORDS=USER
+    url: jdbc:h2:mem:testdb;NON_KEYWORDS=USER;DB_CLOSE_DELAY=-1
     username: sa
     password:
+  h2:
+    console:
+      enabled: true
+      settings:
+        web-allow-others: true
+  sql:
+    init:
+      platform: h2
+      mode: always
+      schema-locations: classpath:/schema.sql
+      data-locations: classpath:/data.sql
