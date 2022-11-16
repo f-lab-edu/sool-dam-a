@@ -1,3 +1,5 @@
+![Branches](.github/badges/branches.svg)
+
 # 술담아
 
 술담화 같은 술 구독 서비스
