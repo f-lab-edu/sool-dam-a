@@ -1,22 +1,26 @@
 package com.flab.sooldama.domain.user.api;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.flab.sooldama.domain.user.domain.User;
 import com.flab.sooldama.domain.user.dto.request.JoinUserRequest;
+import com.flab.sooldama.domain.user.dto.request.LoginUserRequest;
 import com.flab.sooldama.domain.user.exception.DuplicateEmailExistsException;
+import com.flab.sooldama.domain.user.exception.NoSuchUserException;
+import com.flab.sooldama.domain.user.exception.PasswordNotMatchException;
 import com.flab.sooldama.domain.user.service.UserService;
-import java.time.LocalDateTime;
 import java.util.Iterator;
 import java.util.Set;
+import javax.servlet.http.HttpSession;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import org.assertj.core.api.Assertions;
@@ -27,6 +31,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 
 /**
@@ -99,8 +104,8 @@ public class UserApiTest {
 	}
 
 	@Test
-	@DisplayName("이메일이 중복일 경우 bad request status 반환")
-	public void joinWithDuplicationEmailTest() throws Exception {
+	@DisplayName("회원가입 중 예외 발생시 Controller Advice가 처리하는지 확인")
+	public void exceptionHandledByControllerAdviceTest() throws Exception {
 		// 테스트 데이터 및 동작 정의
 		JoinUserRequest request = JoinUserRequest.builder()
 			.email("sehoon@fmail.com")
@@ -150,5 +155,100 @@ public class UserApiTest {
 			ConstraintViolation<JoinUserRequest> next = iterator.next();
 			Assertions.assertThat(next.getMessage()).contains(messageForInvalidEmail);
 		}
+	}
+
+	@Test
+	@DisplayName("회원가입되지 않은 이메일로 로그인 시 로그인 실패")
+	public void loginFailEmailNotFound() throws Exception {
+		// 테스트 데이터 및 동작 정의
+		LoginUserRequest invalidRequest = LoginUserRequest.builder()
+			.email("yet-joined@fmail.com")
+			.password("q1w2e3!")
+			.build();
+
+		String content = objectMapper.writeValueAsString(invalidRequest);
+		MockHttpSession session = new MockHttpSession();
+
+		doThrow(NoSuchUserException.class).when(userService)
+			.loginUser(any(LoginUserRequest.class), any(HttpSession.class));
+
+		// 실행
+		mockMvc.perform(post("/users/login")
+				.content(content)
+				.session(session)
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON))
+			.andDo(print())
+			.andExpect(status().isBadRequest());
+
+		// 행위 검증
+		assertThrows(NoSuchUserException.class, () -> {
+			userService.loginUser(invalidRequest, session);
+		});
+
+		verify(userService, times(2)).loginUser(any(LoginUserRequest.class),
+			any(HttpSession.class));
+	}
+
+	@Test
+	@DisplayName("등록된 사용자이더라도 비밀번호 틀리면 로그인 불가")
+	public void loginFailPasswordNotMatch() throws Exception {
+		// 테스트 데이터 및 동작 정의
+		LoginUserRequest invalidRequest = LoginUserRequest.builder()
+			.email("joined@fmail.com")
+			.password("q1w2e3!")
+			.build();
+
+		String content = objectMapper.writeValueAsString(invalidRequest);
+		MockHttpSession session = new MockHttpSession();
+
+		doThrow(PasswordNotMatchException.class).when(userService)
+			.loginUser(any(LoginUserRequest.class), any(HttpSession.class));
+
+		// 실행
+		mockMvc.perform(post("/users/login")
+				.content(content)
+				.session(session)
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON))
+			.andDo(print())
+			.andExpect(status().isBadRequest());
+
+		// 행위 검증
+		assertThrows(PasswordNotMatchException.class, () -> {
+			userService.loginUser(invalidRequest, session);
+		});
+
+		verify(userService, times(2)).loginUser(any(LoginUserRequest.class),
+			any(HttpSession.class));
+	}
+
+	@Test
+	@DisplayName("로그인 성공 테스트")
+	public void loginSuccess() throws Exception {
+		// 테스트 데이터 및 동작 정의
+		LoginUserRequest validRequest = LoginUserRequest.builder()
+			.email("joined@fmail.com")
+			.password("q1w2e3!")
+			.build();
+
+		String content = objectMapper.writeValueAsString(validRequest);
+		MockHttpSession session = new MockHttpSession();
+
+		doNothing().when(userService)
+			.loginUser(any(LoginUserRequest.class), any(HttpSession.class));
+
+		// 실행
+		mockMvc.perform(post("/users/login")
+				.content(content)
+				.session(session)
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON))
+			.andDo(print())
+			.andExpect(status().isOk());
+
+		// 행위 검증
+		verify(userService, times(1)).loginUser(any(LoginUserRequest.class),
+			any(HttpSession.class));
 	}
 }

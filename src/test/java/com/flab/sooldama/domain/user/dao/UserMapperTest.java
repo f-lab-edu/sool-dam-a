@@ -1,8 +1,6 @@
 package com.flab.sooldama.domain.user.dao;
 
 import com.flab.sooldama.domain.user.domain.User;
-import java.time.LocalDateTime;
-import java.util.Optional;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

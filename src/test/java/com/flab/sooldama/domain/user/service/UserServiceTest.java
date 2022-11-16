@@ -3,6 +3,7 @@ package com.flab.sooldama.domain.user.service;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -10,11 +11,14 @@ import static org.mockito.Mockito.when;
 import com.flab.sooldama.domain.user.dao.UserMapper;
 import com.flab.sooldama.domain.user.domain.User;
 import com.flab.sooldama.domain.user.dto.request.JoinUserRequest;
+import com.flab.sooldama.domain.user.dto.request.LoginUserRequest;
 import com.flab.sooldama.domain.user.dto.response.JoinUserResponse;
 import com.flab.sooldama.domain.user.exception.DuplicateEmailExistsException;
 import com.flab.sooldama.domain.user.exception.NoSuchUserException;
+import com.flab.sooldama.domain.user.exception.PasswordNotMatchException;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import javax.servlet.http.HttpSession;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,6 +28,7 @@ import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
+import org.springframework.mock.web.MockHttpSession;
 
 /*
  * @ExtendWith 어노테이션은 테스트에서 사용할 클래스를 명시합니다. @ExtendWith(MockitoExtension.class)를 사용함으로써
@@ -122,6 +127,86 @@ class UserServiceTest {
 		assertThrows(DuplicateEmailExistsException.class, () -> {
 			userService.insertUser(request);
 		});
+
+		// 행위 검증
+		verify(userMapper).findUserByEmail(any(String.class));
+	}
+
+	@Test
+	@DisplayName("회원가입되지 않은 이메일로 로그인 시 로그인 실패")
+	public void loginFailEmailNotFound() throws Exception {
+		// 테스트 데이터 및 동작 정의
+		LoginUserRequest invalidRequest = LoginUserRequest.builder()
+			.email("yet-joined@fmail.com")
+			.password("q1w2e3!")
+			.build();
+		MockHttpSession session = new MockHttpSession();
+
+		when(userMapper.findUserByEmail(any(String.class))).thenReturn(Optional.ofNullable(null));
+
+		// 실행
+		assertThrows(NoSuchUserException.class, () -> {
+			userService.loginUser(invalidRequest, session);
+		});
+
+		// 행위 검증
+		verify(userMapper).findUserByEmail(any(String.class));
+	}
+
+	@Test
+	@DisplayName("등록된 사용자이더라도 비밀번호 틀리면 로그인 불가")
+	public void loginFailPasswordNotMatch() throws Exception {
+		// 테스트 데이터 및 동작 정의
+		LoginUserRequest invalidRequest = LoginUserRequest.builder()
+			.email("joined@fmail.com")
+			.password("cant-remember!")
+			.build();
+		User validUser = User.builder()
+			.email("joined@fmail.com")
+			.password("q1w2e3!")
+			.name("joined")
+			.phoneNumber("010-1010-1010")
+			.nickname("joi")
+			.isAdult(true)
+			.createdAt(LocalDateTime.now())
+			.build();
+		MockHttpSession session = new MockHttpSession();
+
+		when(userMapper.findUserByEmail(any(String.class))).thenReturn(Optional.of(validUser));
+
+		// 실행
+		assertThrows(PasswordNotMatchException.class, () -> {
+			userService.loginUser(invalidRequest, session);
+		});
+
+		// 행위 검증
+		verify(userMapper, times(1)).findUserByEmail(any(String.class));
+	}
+
+	@Test
+	@DisplayName("로그인 성공 테스트")
+	public void loginSuccess() {
+		// 테스트 데이터 및 동작 정의
+		LoginUserRequest validRequest = LoginUserRequest.builder()
+			.email("joined@fmail.com")
+			.password("q1w2e3!")
+			.build();
+		User validUser = User.builder()
+			.email("joined@fmail.com")
+			.password("q1w2e3!")
+			.name("joined")
+			.phoneNumber("010-1010-1010")
+			.nickname("joi")
+			.isAdult(true)
+			.createdAt(LocalDateTime.now())
+			.build();
+
+		MockHttpSession session = new MockHttpSession();
+
+		when(userMapper.findUserByEmail(any(String.class))).thenReturn(Optional.of(validUser));
+
+		// 실행
+		userService.loginUser(validRequest, session);
 
 		// 행위 검증
 		verify(userMapper).findUserByEmail(any(String.class));

@@ -2,6 +2,7 @@ package com.flab.sooldama.domain.product.dao;
 
 import com.flab.sooldama.domain.product.domain.Product;
 import java.util.List;
+import java.util.Optional;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -12,4 +13,6 @@ public interface ProductMapper {
 		@Param("offset") Integer offset,
 		@Param("limit") Integer limit,
 		@Param("categoryId") Long categoryId);
+
+    Optional<Product> selectProductById(Long productId);
 }
