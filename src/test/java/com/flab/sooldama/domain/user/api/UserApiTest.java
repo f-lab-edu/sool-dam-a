@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flab.sooldama.domain.user.dto.request.JoinUserRequest;
 import com.flab.sooldama.domain.user.dto.request.LoginUserRequest;
 import com.flab.sooldama.domain.user.exception.DuplicateEmailExistsException;
+import com.flab.sooldama.domain.user.exception.FailToEncryptPasswordException;
 import com.flab.sooldama.domain.user.exception.NoSuchUserException;
 import com.flab.sooldama.domain.user.exception.PasswordNotMatchException;
 import com.flab.sooldama.domain.user.service.UserService;
@@ -128,6 +129,36 @@ public class UserApiTest {
 				.accept(MediaType.APPLICATION_JSON))
 			.andDo(print())
 			.andExpect(status().isBadRequest());
+
+		// 행위 검증
+		verify(userService, times(1)).insertUser(any(JoinUserRequest.class));
+	}
+
+	@Test
+	@DisplayName("회원가입 중 비밀번호 암호화 실패 시 Controller Advice가 예외를 처리")
+	public void encryptionExceptionHandledByControllerAdviceTest() throws Exception {
+		// 테스트 데이터 및 동작 정의
+		JoinUserRequest request = JoinUserRequest.builder()
+			.email("sehoon@fmail.com")
+			.password("abracadabra")
+			.name("sehoon gim")
+			.phoneNumber("010-1010-1010")
+			.nickname("sesoon")
+			.isAdult(true)
+			.build();
+
+		String content = objectMapper.writeValueAsString(request);
+
+		when(userService.insertUser(any(JoinUserRequest.class))).thenThrow(
+			FailToEncryptPasswordException.class);
+
+		// 실행
+		mockMvc.perform(post("/users")
+				.content(content)
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON))
+			.andDo(print())
+			.andExpect(status().isInternalServerError());
 
 		// 행위 검증
 		verify(userService, times(1)).insertUser(any(JoinUserRequest.class));
