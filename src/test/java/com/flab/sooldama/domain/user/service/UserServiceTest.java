@@ -211,7 +211,7 @@ class UserServiceTest {
 	}
 
 	@Test
-	@DisplayName("비밀번호 변환 테스트")
+	@DisplayName("회원가입 시 입력한 비밀번호는 암호화되어 입력 당시와 달라진다")
 	public void encryptPasswordSuccess() {
 		// 테스트 데이터 및 동작 정의
 		String password = "abracadabra";
