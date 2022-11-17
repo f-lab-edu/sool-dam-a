@@ -131,6 +131,56 @@ class UserServiceTest {
 	}
 
 	@Test
+	@DisplayName("회원가입 시 입력한 비밀번호는 암호화되어 입력 당시와 달라진다")
+	public void encryptPasswordSuccess() {
+		// 테스트 데이터 및 동작 정의
+		String password = "abracadabra";
+		JoinUserRequest request = JoinUserRequest.builder()
+			.email("sehoon@fmail.com")
+			.password(password)
+			.name("sehoon gim")
+			.phoneNumber("010-1010-1010")
+			.nickname("sesoon")
+			.isAdult(true)
+			.build();
+
+		String encryptedPassword = userService.encryptPassword(password);
+
+		User userWithEncryptedPassword = JoinUserRequest.builder()
+			.email(request.getEmail())
+			.password(encryptedPassword)
+			.name(request.getName())
+			.phoneNumber(request.getPhoneNumber())
+			.nickname(request.getNickname())
+			.isAdult(request.isAdult())
+			.build()
+			.toUser();
+
+		doNothing().when(userMapper).insertUser(any(User.class));
+		when(userMapper.findUserByEmail(any(String.class))).thenAnswer(new Answer() {
+			private int count = 0;
+
+			public Object answer(InvocationOnMock invocation) {
+				if (++count == 1) {
+					return Optional.ofNullable(null);
+				} else {
+					return Optional.of(userWithEncryptedPassword);
+				}
+			}
+		});
+
+		// 실행
+		userService.insertUser(request);
+
+		// 행위 검증
+		Assertions.assertThat(encryptedPassword).isNotEqualTo(password);
+		Assertions.assertThat(encryptedPassword).isEqualTo(userService.encryptPassword(password));
+
+		verify(userMapper).insertUser(any(User.class));
+		verify(userMapper, times(2)).findUserByEmail(any(String.class));
+	}
+
+	@Test
 	@DisplayName("회원가입되지 않은 이메일로 로그인 시 로그인 실패")
 	public void loginFailEmailNotFound() throws Exception {
 		// 테스트 데이터 및 동작 정의
@@ -208,55 +258,5 @@ class UserServiceTest {
 
 		// 행위 검증
 		verify(userMapper).findUserByEmail(any(String.class));
-	}
-
-	@Test
-	@DisplayName("회원가입 시 입력한 비밀번호는 암호화되어 입력 당시와 달라진다")
-	public void encryptPasswordSuccess() {
-		// 테스트 데이터 및 동작 정의
-		String password = "abracadabra";
-		JoinUserRequest request = JoinUserRequest.builder()
-			.email("sehoon@fmail.com")
-			.password(password)
-			.name("sehoon gim")
-			.phoneNumber("010-1010-1010")
-			.nickname("sesoon")
-			.isAdult(true)
-			.build();
-
-		String encryptedPassword = userService.encryptPassword(password);
-
-		User userWithEncryptedPassword = JoinUserRequest.builder()
-			.email(request.getEmail())
-			.password(encryptedPassword)
-			.name(request.getName())
-			.phoneNumber(request.getPhoneNumber())
-			.nickname(request.getNickname())
-			.isAdult(request.isAdult())
-			.build()
-			.toUser();
-
-		doNothing().when(userMapper).insertUser(any(User.class));
-		when(userMapper.findUserByEmail(any(String.class))).thenAnswer(new Answer() {
-			private int count = 0;
-
-			public Object answer(InvocationOnMock invocation) {
-				if (++count == 1) {
-					return Optional.ofNullable(null);
-				} else {
-					return Optional.of(userWithEncryptedPassword);
-				}
-			}
-		});
-
-		// 실행
-		userService.insertUser(request);
-
-		// 행위 검증
-		Assertions.assertThat(encryptedPassword).isNotEqualTo(password);
-		Assertions.assertThat(encryptedPassword).isEqualTo(userService.encryptPassword(password));
-
-		verify(userMapper).insertUser(any(User.class));
-		verify(userMapper, times(2)).findUserByEmail(any(String.class));
 	}
 }
