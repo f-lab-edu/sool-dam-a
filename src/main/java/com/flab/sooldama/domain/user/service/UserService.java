@@ -81,7 +81,7 @@ public class UserService {
 			throw new NoSuchUserException("등록된 사용자가 아닙니다");
 		});
 
-		if (!request.getPassword().equals(user.getPassword())) {
+		if (!encryptPassword(request.getPassword()).equals(user.getPassword())) {
 			throw new PasswordNotMatchException("비밀번호가 다릅니다");
 		}
 
