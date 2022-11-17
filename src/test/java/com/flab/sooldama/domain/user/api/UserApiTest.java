@@ -105,8 +105,8 @@ public class UserApiTest {
 	}
 
 	@Test
-	@DisplayName("회원가입 중 예외 발생시 Controller Advice가 처리하는지 확인")
-	public void exceptionHandledByControllerAdviceTest() throws Exception {
+	@DisplayName("회원가입 중 이메일 중복 예외 발생시 Controller Advice가 처리")
+	public void duplicatedEmailExceptionHandledByControllerAdviceTest() throws Exception {
 		// 테스트 데이터 및 동작 정의
 		JoinUserRequest request = JoinUserRequest.builder()
 			.email("sehoon@fmail.com")
