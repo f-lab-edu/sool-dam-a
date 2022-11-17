@@ -28,7 +28,18 @@ public class UserService {
 			throw new DuplicateEmailExistsException("이메일 주소 중복입니다");
 		});
 
-		userMapper.insertUser(request.toUser());
+		String encryptedPassword = encryptPassword(request.getPassword());
+		User user = JoinUserRequest.builder()
+			.email(request.getEmail())
+			.password(encryptedPassword)
+			.name(request.getName())
+			.phoneNumber(request.getPhoneNumber())
+			.nickname(request.getNickname())
+			.isAdult(request.isAdult())
+			.build()
+			.toUser();
+
+		userMapper.insertUser(user);
 		User userByEmail = userMapper.findUserByEmail(request.getEmail()).get();
 
 		return JoinUserResponse.builder()
