@@ -8,6 +8,9 @@ import com.flab.sooldama.domain.user.dto.response.JoinUserResponse;
 import com.flab.sooldama.domain.user.exception.NoSuchUserException;
 import com.flab.sooldama.domain.user.exception.DuplicateEmailExistsException;
 import com.flab.sooldama.domain.user.exception.PasswordNotMatchException;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -71,5 +74,26 @@ public class UserService {
 		}
 
 		session.setAttribute(USER_EMAIL, request.getEmail());
+	}
+
+	public String encryptPassword(String password) {
+		String result = "";
+		MessageDigest md = null;
+		try {
+			md = MessageDigest.getInstance("SHA-256");
+		} catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException(e);
+		}
+
+		md.update(password.getBytes(StandardCharsets.UTF_8));
+		byte byteData[] = md.digest();
+
+
+		StringBuffer stringBuffer = new StringBuffer();
+		for (byte b : byteData) {
+			stringBuffer.append(String.format("%02x", b));
+		}
+
+		return stringBuffer.toString();
 	}
 }
