@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flab.sooldama.domain.user.dao.UserMapper;
 import com.flab.sooldama.domain.user.domain.User;
 import com.flab.sooldama.domain.user.dto.request.LoginUserRequest;
+import com.flab.sooldama.domain.user.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,14 +32,20 @@ public class UserIntegrationTest {
 	private ObjectMapper objectMapper;
 
 	@Autowired
+	private UserService userService;
+
+	@Autowired
 	private UserMapper userMapper;
 
 	@BeforeEach
 	public void setUp() {
 		userMapper.deleteAllUsers();
+		String validPassword = "q1w2e3!";
+		String encryptedValidPassword = userService.encryptPassword(validPassword);
+
 		User user = User.builder()
 			.email("joined@fmail.com")
-			.password("q1w2e3!")
+			.password(encryptedValidPassword)
 			.name("joined user")
 			.phoneNumber("010-1010-1010")
 			.nickname("joined")
