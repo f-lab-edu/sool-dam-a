@@ -2,6 +2,7 @@ package com.flab.sooldama.global.exception;
 
 import com.flab.sooldama.domain.product.exception.ProductNotFoundException;
 import com.flab.sooldama.domain.user.exception.DuplicateEmailExistsException;
+import com.flab.sooldama.domain.user.exception.FailToEncryptPasswordException;
 import com.flab.sooldama.domain.user.exception.NoSuchUserException;
 import com.flab.sooldama.domain.user.exception.PasswordNotMatchException;
 import org.springframework.http.HttpStatus;
@@ -47,6 +48,12 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<Void> handlePasswordNotMatchException(
 		PasswordNotMatchException e) {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+	}
+
+	@ExceptionHandler(FailToEncryptPasswordException.class)
+	public ResponseEntity<Void> handlePasswordNotMatchException(
+		FailToEncryptPasswordException e) {
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	}
 
 	@ExceptionHandler(ConstraintViolationException.class)
