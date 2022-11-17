@@ -211,4 +211,13 @@ class UserServiceTest {
 		// 행위 검증
 		verify(userMapper).findUserByEmail(any(String.class));
 	}
+
+	@Test
+	@DisplayName("비밀번호 변환 테스트")
+	public void encryptPasswordSuccess() {
+		String password = "abracadabra";
+		String encryptedPassword = userService.encryptPassword(password);
+		Assertions.assertThat(encryptedPassword).isNotEqualTo(password);
+		Assertions.assertThat(encryptedPassword).isEqualTo(userService.encryptPassword(password));
+	}
 }
