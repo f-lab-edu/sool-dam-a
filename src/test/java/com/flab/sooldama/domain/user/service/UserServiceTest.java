@@ -202,22 +202,27 @@ class UserServiceTest {
 	}
 
 	@Test
-	@DisplayName("등록된 사용자이더라도 비밀번호 틀리면 로그인 불가")
+	@DisplayName("등록된 사용자이더라도 로그인 시 입력한 비밀번호를 암호화했을 때 DB에 저장된 값과 일치하지 않으면 로그인 불가")
 	public void loginFailPasswordNotMatch() throws Exception {
 		// 테스트 데이터 및 동작 정의
 		LoginUserRequest invalidRequest = LoginUserRequest.builder()
 			.email("joined@fmail.com")
 			.password("cant-remember!")
 			.build();
+
+		String validPassword = "valid-password";
+		String encryptedValidPassword = userService.encryptPassword(validPassword);
+
 		User validUser = User.builder()
 			.email("joined@fmail.com")
-			.password("q1w2e3!")
+			.password(encryptedValidPassword)
 			.name("joined")
 			.phoneNumber("010-1010-1010")
 			.nickname("joi")
 			.isAdult(true)
 			.createdAt(LocalDateTime.now())
 			.build();
+
 		MockHttpSession session = new MockHttpSession();
 
 		when(userMapper.findUserByEmail(any(String.class))).thenReturn(Optional.of(validUser));
@@ -235,13 +240,16 @@ class UserServiceTest {
 	@DisplayName("로그인 성공 테스트")
 	public void loginSuccess() {
 		// 테스트 데이터 및 동작 정의
+		String validPassword = "q1w2e3!";
+		String encryptedValidPassword = userService.encryptPassword(validPassword);
+
 		LoginUserRequest validRequest = LoginUserRequest.builder()
 			.email("joined@fmail.com")
-			.password("q1w2e3!")
+			.password(validPassword)
 			.build();
 		User validUser = User.builder()
 			.email("joined@fmail.com")
-			.password("q1w2e3!")
+			.password(encryptedValidPassword)
 			.name("joined")
 			.phoneNumber("010-1010-1010")
 			.nickname("joi")
