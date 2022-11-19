@@ -97,13 +97,13 @@ public class UserService {
 		}
 
 		digest.update(password.getBytes(StandardCharsets.UTF_8));
-		byte byteData[] = digest.digest();
+		byte hash[] = digest.digest();
 
-		StringBuffer stringBuffer = new StringBuffer();
-		for (byte b : byteData) {
-			stringBuffer.append(String.format("%02x", b));
+		StringBuffer result = new StringBuffer();
+		for (byte b : hash) {
+			result.append(String.format("%02x", b));
 		}
 
-		return stringBuffer.toString();
+		return result.toString();
 	}
 }
