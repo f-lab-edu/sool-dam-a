@@ -89,16 +89,15 @@ public class UserService {
 	}
 
 	public String encryptPassword(String password) {
-		String result = "";
-		MessageDigest md = null;
+		MessageDigest digest = null;
 		try {
-			md = MessageDigest.getInstance("SHA-256");
+			digest = MessageDigest.getInstance("SHA-256");
 		} catch (NoSuchAlgorithmException e) {
 			throw new FailToEncryptPasswordException("비밀번호 암호화에 실패했습니다");
 		}
 
-		md.update(password.getBytes(StandardCharsets.UTF_8));
-		byte byteData[] = md.digest();
+		digest.update(password.getBytes(StandardCharsets.UTF_8));
+		byte byteData[] = digest.digest();
 
 		StringBuffer stringBuffer = new StringBuffer();
 		for (byte b : byteData) {
