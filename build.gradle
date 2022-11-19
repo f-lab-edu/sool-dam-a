@@ -58,7 +58,8 @@ jacocoTestCoverageVerification {
 
 			excludes = [
 					'com.flab.sooldama.domain.**.dto.*',
-					'com.flab.sooldama.domain.**.domain.*'
+					'com.flab.sooldama.domain.**.domain.*',
+					'com.flab.sooldama.domain.user.exception.FailToEncryptPasswordException'
 			]
 
 			limit { // rule 에 대한 제한을 설정합니다.
