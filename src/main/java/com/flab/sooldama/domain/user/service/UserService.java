@@ -98,7 +98,7 @@ public class UserService {
 		}
 
 		digest.update(password.getBytes(StandardCharsets.UTF_8));
-		byte hash[] = digest.digest();
+		byte[] hash = digest.digest();
 
 		StringBuffer result = new StringBuffer();
 		for (byte b : hash) {
