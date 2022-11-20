@@ -100,8 +100,12 @@ public class UserService {
 		digest.update(password.getBytes(StandardCharsets.UTF_8));
 		byte[] hash = digest.digest();
 
+		return formatInHex(hash);
+	}
+
+	private String formatInHex(byte[] bytes) {
 		StringBuffer result = new StringBuffer();
-		for (byte b : hash) {
+		for (byte b : bytes) {
 			result.append(String.format("%02x", b));
 		}
 
