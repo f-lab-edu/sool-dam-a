@@ -51,7 +51,7 @@ public class GlobalExceptionHandler {
 	}
 
 	@ExceptionHandler(FailToEncryptPasswordException.class)
-	public ResponseEntity<Void> handlePasswordNotMatchException(
+	public ResponseEntity<Void> handleFailToEncryptPasswordException(
 		FailToEncryptPasswordException e) {
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	}
