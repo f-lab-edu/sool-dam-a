@@ -23,6 +23,7 @@ public class UserService {
 
 	private final UserMapper userMapper;
 	private static final String USER_EMAIL = "USER_EMAIL";
+	private static final String ENCRYPTION_ALGORITHM = "SHA-256";
 
 	public JoinUserResponse insertUser(JoinUserRequest request) {
 		userMapper.findUserByEmail(request.getEmail()).ifPresent(user -> {
@@ -91,7 +92,7 @@ public class UserService {
 	public String encryptPassword(String password) {
 		MessageDigest digest = null;
 		try {
-			digest = MessageDigest.getInstance("SHA-256");
+			digest = MessageDigest.getInstance(ENCRYPTION_ALGORITHM);
 		} catch (NoSuchAlgorithmException e) {
 			throw new FailToEncryptPasswordException("비밀번호 암호화에 실패했습니다");
 		}
