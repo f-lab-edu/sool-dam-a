@@ -116,21 +116,12 @@ class UserServiceTest {
 	@DisplayName("입력된 이메일 주소가 이미 있을 경우")
 	public void checkDuplicateEmailExists() {
 		// 테스트 데이터 및 동작 정의
-		JoinUserRequest request = JoinUserRequest.builder()
-			.email("sehoon@fmail.com")
-			.password("abracadabra")
-			.name("sehoon gim")
-			.phoneNumber("010-1010-1010")
-			.nickname("sesoon")
-			.isAdult(true)
-			.build();
-
 		when(userMapper.findUserByEmail(any(String.class))).thenReturn(
-			Optional.of(request.toUser()));
+			Optional.of(this.request.toUser()));
 
 		// 실행
 		assertThrows(DuplicateEmailExistsException.class, () -> {
-			userService.insertUser(request);
+			userService.insertUser(this.request);
 		});
 
 		// 행위 검증
