@@ -104,7 +104,7 @@ public class UserService {
 	}
 
 	private String formatInHex(byte[] bytes) {
-		StringBuffer result = new StringBuffer();
+		StringBuilder result = new StringBuilder();
 		for (byte b : bytes) {
 			result.append(String.format("%02x", b));
 		}
