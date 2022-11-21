@@ -18,6 +18,7 @@ import com.flab.sooldama.domain.user.exception.PasswordNotMatchException;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,11 +42,11 @@ class UserServiceTest {
 	@Mock
 	private UserMapper userMapper;
 
-	@Test
-	@DisplayName("사용자가 회원가입하면 DB에 회원정보가 추가되나")
-	public void userInfoAddedOnDB() {
-		// 테스트 데이터 및 동작 정의
-		JoinUserRequest request = JoinUserRequest.builder()
+	private JoinUserRequest request;
+
+	@BeforeEach
+	public void setUp() {
+		request = JoinUserRequest.builder()
 			.email("sehoon@fmail.com")
 			.password("abracadabra")
 			.name("sehoon gim")
@@ -53,14 +54,20 @@ class UserServiceTest {
 			.nickname("sesoon")
 			.isAdult(true)
 			.build();
+	}
+
+	@Test
+	@DisplayName("사용자가 회원가입하면 DB에 회원정보가 추가되나")
+	public void userInfoAddedOnDB() {
+		// 테스트 데이터 및 동작 정의
 		User user = User.builder()
 			.id(1L)
-			.email("sehoon@fmail.com")
-			.password("abracadabra")
-			.name("sehoon gim")
-			.phoneNumber("010-1010-1010")
-			.nickname("sesoon")
-			.isAdult(true)
+			.email(request.getEmail())
+			.password(request.getPassword())
+			.name(request.getName())
+			.phoneNumber(request.getPhoneNumber())
+			.nickname(request.getNickname())
+			.isAdult(request.isAdult())
 			.createdAt(LocalDateTime.now())
 			.build();
 
