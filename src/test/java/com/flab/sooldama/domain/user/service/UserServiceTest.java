@@ -228,20 +228,20 @@ class UserServiceTest {
 	@DisplayName("로그인 성공 테스트")
 	public void loginSuccess() {
 		// 테스트 데이터 및 동작 정의
-		String validPassword = "q1w2e3!";
+		String validPassword = this.request.getPassword();
 		String encryptedValidPassword = userService.encryptPassword(validPassword);
 
 		LoginUserRequest validRequest = LoginUserRequest.builder()
-			.email("joined@fmail.com")
+			.email(this.request.getEmail())
 			.password(validPassword)
 			.build();
 		User validUser = User.builder()
-			.email("joined@fmail.com")
+			.email(this.request.getEmail())
 			.password(encryptedValidPassword)
-			.name("joined")
-			.phoneNumber("010-1010-1010")
-			.nickname("joi")
-			.isAdult(true)
+			.name(this.request.getName())
+			.phoneNumber(this.request.getPhoneNumber())
+			.nickname(this.request.getNickname())
+			.isAdult(this.request.isAdult())
 			.createdAt(LocalDateTime.now())
 			.build();
 
