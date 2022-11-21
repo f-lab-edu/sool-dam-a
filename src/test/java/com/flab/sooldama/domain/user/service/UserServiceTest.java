@@ -135,12 +135,12 @@ class UserServiceTest {
 		String encryptedPassword = userService.encryptPassword(this.request.getPassword());
 
 		User userWithEncryptedPassword = JoinUserRequest.builder()
-			.email(request.getEmail())
+			.email(this.request.getEmail())
 			.password(encryptedPassword)
-			.name(request.getName())
-			.phoneNumber(request.getPhoneNumber())
-			.nickname(request.getNickname())
-			.isAdult(request.isAdult())
+			.name(this.request.getName())
+			.phoneNumber(this.request.getPhoneNumber())
+			.nickname(this.request.getNickname())
+			.isAdult(this.request.isAdult())
 			.build()
 			.toUser();
 
@@ -158,7 +158,7 @@ class UserServiceTest {
 		});
 
 		// 실행
-		userService.insertUser(request);
+		userService.insertUser(this.request);
 
 		// 행위 검증
 		Assertions.assertThat(encryptedPassword).isNotEqualTo(this.request.getPassword());
