@@ -158,7 +158,7 @@ class UserServiceTest {
 		});
 
 		// 실행
-		userService.insertUser(this.request);
+		userService.insertUser(request);
 
 		// 행위 검증
 		Assertions.assertThat(encryptedPassword).isNotEqualTo(this.request.getPassword());
@@ -198,16 +198,16 @@ class UserServiceTest {
 			.password("cant-remember!")
 			.build();
 
-		String validPassword = "valid-password";
+		String validPassword = this.request.getPassword();
 		String encryptedValidPassword = userService.encryptPassword(validPassword);
 
 		User validUser = User.builder()
-			.email("joined@fmail.com")
+			.email(this.request.getEmail())
 			.password(encryptedValidPassword)
-			.name("joined")
-			.phoneNumber("010-1010-1010")
-			.nickname("joi")
-			.isAdult(true)
+			.name(this.request.getName())
+			.phoneNumber(this.request.getPhoneNumber())
+			.nickname(this.request.getNickname())
+			.isAdult(this.request.isAdult())
 			.createdAt(LocalDateTime.now())
 			.build();
 
