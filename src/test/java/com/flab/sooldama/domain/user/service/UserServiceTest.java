@@ -46,7 +46,7 @@ class UserServiceTest {
 
 	@BeforeEach
 	public void setUp() {
-		request = JoinUserRequest.builder()
+		this.request = JoinUserRequest.builder()
 			.email("sehoon@fmail.com")
 			.password("abracadabra")
 			.name("sehoon gim")
@@ -62,12 +62,12 @@ class UserServiceTest {
 		// 테스트 데이터 및 동작 정의
 		User user = User.builder()
 			.id(1L)
-			.email(request.getEmail())
-			.password(request.getPassword())
-			.name(request.getName())
-			.phoneNumber(request.getPhoneNumber())
-			.nickname(request.getNickname())
-			.isAdult(request.isAdult())
+			.email(this.request.getEmail())
+			.password(this.request.getPassword())
+			.name(this.request.getName())
+			.phoneNumber(this.request.getPhoneNumber())
+			.nickname(this.request.getNickname())
+			.isAdult(this.request.isAdult())
 			.createdAt(LocalDateTime.now())
 			.build();
 
@@ -86,7 +86,7 @@ class UserServiceTest {
 		});
 
 		// 실행
-		JoinUserResponse response = userService.insertUser(request);
+		JoinUserResponse response = userService.insertUser(this.request);
 		JoinUserResponse joinedUserResponse = userService.findUserById(response.getId());
 
 		// 행위 검증
