@@ -9,6 +9,8 @@ import com.flab.sooldama.domain.user.dao.UserMapper;
 import com.flab.sooldama.domain.user.domain.User;
 import com.flab.sooldama.domain.user.dto.request.LoginUserRequest;
 import com.flab.sooldama.domain.user.service.UserService;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -38,10 +40,16 @@ public class UserIntegrationTest {
 	private UserMapper userMapper;
 
 	@BeforeEach
-	public void setUp() {
+	public void setUp()
+		throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
 		userMapper.deleteAllUsers();
 		String validPassword = "q1w2e3!";
-		String encryptedValidPassword = userService.encryptPassword(validPassword);
+
+		UserService passwordEncryptor = new UserService(userMapper);
+		Method method = passwordEncryptor.getClass().getDeclaredMethod("encryptPassword", String.class);
+		method.setAccessible(true);
+
+		String encryptedValidPassword = (String) method.invoke(passwordEncryptor, validPassword);
 
 		User user = User.builder()
 			.email("joined@fmail.com")
