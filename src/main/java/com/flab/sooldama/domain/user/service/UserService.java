@@ -88,7 +88,7 @@ public class UserService {
 		session.setAttribute(USER_EMAIL, request.getEmail());
 	}
 
-	public String encryptPassword(String password) {
+	private String encryptPassword(String password) {
 		MessageDigest digest = null;
 		try {
 			digest = MessageDigest.getInstance(ENCRYPTION_ALGORITHM);
