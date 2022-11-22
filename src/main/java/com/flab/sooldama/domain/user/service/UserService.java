@@ -5,7 +5,6 @@ import com.flab.sooldama.domain.user.domain.User;
 import com.flab.sooldama.domain.user.dto.request.JoinUserRequest;
 import com.flab.sooldama.domain.user.dto.request.LoginUserRequest;
 import com.flab.sooldama.domain.user.dto.response.JoinUserResponse;
-import com.flab.sooldama.domain.user.exception.FailToEncryptPasswordException;
 import com.flab.sooldama.domain.user.exception.NoSuchUserException;
 import com.flab.sooldama.domain.user.exception.DuplicateEmailExistsException;
 import com.flab.sooldama.domain.user.exception.PasswordNotMatchException;
@@ -94,7 +93,7 @@ public class UserService {
 		try {
 			digest = MessageDigest.getInstance(ENCRYPTION_ALGORITHM);
 		} catch (NoSuchAlgorithmException e) {
-			throw new FailToEncryptPasswordException("비밀번호 암호화에 실패했습니다");
+			throw new RuntimeException("비밀번호 암호화에 실패했습니다");
 		}
 
 		digest.update(password.getBytes(StandardCharsets.UTF_8));
