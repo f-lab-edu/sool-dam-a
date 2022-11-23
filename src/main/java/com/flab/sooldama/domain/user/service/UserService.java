@@ -110,4 +110,8 @@ public class UserService {
 
 		return result.toString();
 	}
+
+	public void logoutUser(HttpSession session) {
+
+	}
 }
