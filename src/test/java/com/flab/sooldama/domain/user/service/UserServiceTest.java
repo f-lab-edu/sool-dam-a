@@ -273,4 +273,17 @@ class UserServiceTest {
 		// 행위 검증
 		verify(userMapper).findUserByEmail(any(String.class));
 	}
+
+	@Test
+	@DisplayName("로그아웃 실패 테스트")
+	public void logoutFail() {
+		// 테스트 데이터 및 동작 정의
+		MockHttpSession session = new MockHttpSession();
+		session.setAttribute("USER_EMAIL", null);
+
+		// 실행 및 행위 검증
+		assertThrows(NoSuchUserException.class, () -> {
+			userService.logoutUser(session);
+		});
+	}
 }
