@@ -143,15 +143,10 @@ class UserServiceTest {
 	@Test
 	@DisplayName("회원가입 시 입력한 비밀번호는 암호화되어 입력 당시와 달라진다")
 	public void encryptPasswordSuccess()
-		throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+		throws InvocationTargetException, IllegalAccessException {
 		// 테스트 데이터 및 동작 정의
-		UserService passwordEncryptor = new UserService(userMapper);
-		Method method = passwordEncryptor.getClass()
-			.getDeclaredMethod("encryptPassword", String.class);
-		method.setAccessible(true);
-
-		String encryptedPassword = (String) method.invoke(passwordEncryptor,
-			this.request.getPassword());
+		String encryptedPassword = (String) this.passwordEncryptMethod.invoke(
+			this.passwordEncryptor, this.request.getPassword());
 
 		User userWithEncryptedPassword = JoinUserRequest.builder()
 			.email(this.request.getEmail())
@@ -182,7 +177,8 @@ class UserServiceTest {
 		// 행위 검증
 		assertThat(encryptedPassword).isNotEqualTo(this.request.getPassword());
 		assertThat(encryptedPassword).isEqualTo(
-			(String) method.invoke(passwordEncryptor, this.request.getPassword()));
+			(String) this.passwordEncryptMethod.invoke(this.passwordEncryptor,
+				this.request.getPassword()));
 
 		verify(userMapper).insertUser(any(User.class));
 		verify(userMapper, times(2)).findUserByEmail(any(String.class));
@@ -220,12 +216,8 @@ class UserServiceTest {
 
 		String validPassword = this.request.getPassword();
 
-		UserService passwordEncryptor = new UserService(userMapper);
-		Method method = passwordEncryptor.getClass()
-			.getDeclaredMethod("encryptPassword", String.class);
-		method.setAccessible(true);
-
-		String encryptedValidPassword = (String) method.invoke(passwordEncryptor, validPassword);
+		String encryptedValidPassword = (String) this.passwordEncryptMethod.invoke(
+			this.passwordEncryptor, validPassword);
 
 		User validUser = User.builder()
 			.email(this.request.getEmail())
@@ -253,22 +245,18 @@ class UserServiceTest {
 	@Test
 	@DisplayName("로그인 성공 테스트")
 	public void loginSuccess()
-		throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+		throws InvocationTargetException, IllegalAccessException {
 		// 테스트 데이터 및 동작 정의
 		String validPassword = this.request.getPassword();
 
-		UserService passwordEncryptor = new UserService(userMapper);
-		Method method = passwordEncryptor.getClass()
-			.getDeclaredMethod("encryptPassword", String.class);
-		method.setAccessible(true);
-
-		String encryptedValidPassword = (String) method.invoke(passwordEncryptor,
-			this.request.getPassword());
+		String encryptedValidPassword = (String) this.passwordEncryptMethod.invoke(
+			this.passwordEncryptor, this.request.getPassword());
 
 		LoginUserRequest validRequest = LoginUserRequest.builder()
 			.email(this.request.getEmail())
 			.password(validPassword)
 			.build();
+
 		User validUser = User.builder()
 			.email(this.request.getEmail())
 			.password(encryptedValidPassword)
