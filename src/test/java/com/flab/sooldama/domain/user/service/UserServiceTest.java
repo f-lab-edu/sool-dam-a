@@ -286,4 +286,18 @@ class UserServiceTest {
 			userService.logoutUser(session);
 		});
 	}
+
+	@Test
+	@DisplayName("로그인한 사용자의 세션 정보가 있으면 로그아웃할 수 있다")
+	public void logoutSuccess() {
+		// 테스트 데이터 및 동작 정의
+		MockHttpSession session = new MockHttpSession();
+		session.setAttribute("USER_EMAIL", this.request.getEmail());
+
+		// 실행
+		userService.logoutUser(session);
+
+		// 행위 검증
+		Assertions.assertThat(session.getAttribute("USER_EMAIL")).isNull();
+	}
 }
