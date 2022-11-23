@@ -1,5 +1,6 @@
 package com.flab.sooldama.domain.user.service;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
@@ -92,7 +93,7 @@ class UserServiceTest {
 		JoinUserResponse joinedUserResponse = userService.findUserById(response.getId());
 
 		// 행위 검증
-		Assertions.assertThat(joinedUserResponse.getId()).isEqualTo(1L);
+		assertThat(joinedUserResponse.getId()).isEqualTo(1L);
 		verify(userMapper).insertUser(any(User.class));
 		verify(userMapper, times(2)).findUserByEmail(any(String.class));
 		verify(userMapper).findUserById(any(Long.TYPE));
@@ -136,10 +137,12 @@ class UserServiceTest {
 		throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
 		// 테스트 데이터 및 동작 정의
 		UserService passwordEncryptor = new UserService(userMapper);
-		Method method = passwordEncryptor.getClass().getDeclaredMethod("encryptPassword", String.class);
+		Method method = passwordEncryptor.getClass()
+			.getDeclaredMethod("encryptPassword", String.class);
 		method.setAccessible(true);
 
-		String encryptedPassword = (String) method.invoke(passwordEncryptor, this.request.getPassword());
+		String encryptedPassword = (String) method.invoke(passwordEncryptor,
+			this.request.getPassword());
 
 		User userWithEncryptedPassword = JoinUserRequest.builder()
 			.email(this.request.getEmail())
@@ -168,8 +171,9 @@ class UserServiceTest {
 		userService.insertUser(request);
 
 		// 행위 검증
-		Assertions.assertThat(encryptedPassword).isNotEqualTo(this.request.getPassword());
-		Assertions.assertThat(encryptedPassword).isEqualTo((String)method.invoke(passwordEncryptor, this.request.getPassword()));
+		assertThat(encryptedPassword).isNotEqualTo(this.request.getPassword());
+		assertThat(encryptedPassword).isEqualTo(
+			(String) method.invoke(passwordEncryptor, this.request.getPassword()));
 
 		verify(userMapper).insertUser(any(User.class));
 		verify(userMapper, times(2)).findUserByEmail(any(String.class));
@@ -208,7 +212,8 @@ class UserServiceTest {
 		String validPassword = this.request.getPassword();
 
 		UserService passwordEncryptor = new UserService(userMapper);
-		Method method = passwordEncryptor.getClass().getDeclaredMethod("encryptPassword", String.class);
+		Method method = passwordEncryptor.getClass()
+			.getDeclaredMethod("encryptPassword", String.class);
 		method.setAccessible(true);
 
 		String encryptedValidPassword = (String) method.invoke(passwordEncryptor, validPassword);
@@ -244,10 +249,12 @@ class UserServiceTest {
 		String validPassword = this.request.getPassword();
 
 		UserService passwordEncryptor = new UserService(userMapper);
-		Method method = passwordEncryptor.getClass().getDeclaredMethod("encryptPassword", String.class);
+		Method method = passwordEncryptor.getClass()
+			.getDeclaredMethod("encryptPassword", String.class);
 		method.setAccessible(true);
 
-		String encryptedValidPassword = (String) method.invoke(passwordEncryptor, this.request.getPassword());
+		String encryptedValidPassword = (String) method.invoke(passwordEncryptor,
+			this.request.getPassword());
 
 		LoginUserRequest validRequest = LoginUserRequest.builder()
 			.email(this.request.getEmail())
@@ -298,6 +305,6 @@ class UserServiceTest {
 		userService.logoutUser(session);
 
 		// 행위 검증
-		Assertions.assertThat(session.getAttribute("USER_EMAIL")).isNull();
+		assertThat(session.getAttribute("USER_EMAIL")).isNull();
 	}
 }
