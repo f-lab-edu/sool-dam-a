@@ -46,6 +46,8 @@ class UserServiceTest {
 
 	private JoinUserRequest request;
 
+	private UserService passwordEncryptor;
+
 	private Method passwordEncryptMethod;
 
 	@BeforeEach
@@ -59,7 +61,7 @@ class UserServiceTest {
 			.isAdult(true)
 			.build();
 
-		UserService passwordEncryptor = new UserService(userMapper);
+		this.passwordEncryptor = new UserService(userMapper);
 		this.passwordEncryptMethod = passwordEncryptor.getClass()
 			.getDeclaredMethod("encryptPassword", String.class);
 		this.passwordEncryptMethod.setAccessible(true);
