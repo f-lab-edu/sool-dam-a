@@ -116,6 +116,6 @@ public class UserService {
 			throw new NoSuchUserException("로그인한 사용자가 아닙니다");
 		}
 
-		session.removeAttribute(USER_EMAIL);
+		session.invalidate();
 	}
 }
