@@ -46,8 +46,10 @@ class UserServiceTest {
 
 	private JoinUserRequest request;
 
+	private Method passwordEncryptMethod;
+
 	@BeforeEach
-	public void setUp() {
+	public void setUp() throws NoSuchMethodException {
 		this.request = JoinUserRequest.builder()
 			.email("sehoon@fmail.com")
 			.password("abracadabra")
@@ -56,6 +58,12 @@ class UserServiceTest {
 			.nickname("sesoon")
 			.isAdult(true)
 			.build();
+
+		UserService passwordEncryptor = new UserService(userMapper);
+		this.passwordEncryptMethod = passwordEncryptor.getClass()
+			.getDeclaredMethod("encryptPassword", String.class);
+		this.passwordEncryptMethod.setAccessible(true);
+
 	}
 
 	@Test
