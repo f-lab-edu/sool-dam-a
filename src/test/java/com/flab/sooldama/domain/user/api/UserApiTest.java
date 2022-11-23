@@ -253,6 +253,32 @@ public class UserApiTest {
 	}
 
 	@Test
+	@DisplayName("로그아웃 실패 테스트")
+	public void logoutFail() throws Exception {
+		// 테스트 데이터 및 동작 정의
+		MockHttpSession session = new MockHttpSession();
+		session.setAttribute("USER_EMAIL", null);
+
+		doThrow(NoSuchUserException.class).when(userService)
+			.logoutUser(any(HttpSession.class));
+
+		// 실행
+		mockMvc.perform(post("/users/logout")
+				.session(session)
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON))
+			.andDo(print())
+			.andExpect(status().isBadRequest());
+
+		// 행위 검증
+		assertThrows(NoSuchUserException.class, () -> {
+			userService.logoutUser(session);
+		});
+
+		verify(userService, times(2)).logoutUser(any(HttpSession.class));
+	}
+
+	@Test
 	@DisplayName("로그아웃 성공 테스트")
 	public void logoutSuccess() throws Exception {
 		// 테스트 데이터 및 동작 정의
