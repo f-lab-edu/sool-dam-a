@@ -1,0 +1,10 @@
+# Spring
+spring:
+  config:
+    activate:
+      on-profile: server
+  datasource:
+    url: jdbc:mysql://db-ds936.cdb.ntruss.com:3306/sooldama?serverTimezone=UTC&characterEncoding=UTF-8
+    username: db_admin
+    password: s00ldamadb!
+    driver-class-name: com.mysql.cj.jdbc.Driver
