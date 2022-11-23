@@ -305,6 +305,6 @@ class UserServiceTest {
 		userService.logoutUser(session);
 
 		// 행위 검증
-		assertThat(session.getAttribute("USER_EMAIL")).isNull();
+		assertThrows(IllegalStateException.class, () -> session.invalidate());
 	}
 }
