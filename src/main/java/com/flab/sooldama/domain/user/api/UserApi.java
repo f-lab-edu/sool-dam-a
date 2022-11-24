@@ -53,4 +53,11 @@ public class UserApi {
 
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
+
+	@PostMapping(path = "/logout")
+	public ResponseEntity<Void> logoutUser(HttpSession session) {
+		userService.logoutUser(session);
+
+		return ResponseEntity.status(HttpStatus.OK).build();
+	}
 }
