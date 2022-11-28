@@ -1,0 +1,9 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    url: jdbc:mysql://${SERVER_MYSQL_URL}:${SERVER_MYSQL_PORT}/${SERVER_MYSQL_DBNAME}?serverTimezone=UTC&characterEncoding=UTF-8
+    username: ${SERVER_MYSQL_USERNAME}
+    password: ${SERVER_MYSQL_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver

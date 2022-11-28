@@ -20,7 +20,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.util.Optional;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -47,8 +46,12 @@ class UserServiceTest {
 
 	private JoinUserRequest request;
 
+	private UserService passwordEncryptor;
+
+	private Method passwordEncryptMethod;
+
 	@BeforeEach
-	public void setUp() {
+	public void setUp() throws NoSuchMethodException {
 		this.request = JoinUserRequest.builder()
 			.email("sehoon@fmail.com")
 			.password("abracadabra")
@@ -57,6 +60,12 @@ class UserServiceTest {
 			.nickname("sesoon")
 			.isAdult(true)
 			.build();
+
+		this.passwordEncryptor = new UserService(userMapper);
+		this.passwordEncryptMethod = passwordEncryptor.getClass()
+			.getDeclaredMethod("encryptPassword", String.class);
+		this.passwordEncryptMethod.setAccessible(true);
+
 	}
 
 	@Test
@@ -134,13 +143,10 @@ class UserServiceTest {
 	@Test
 	@DisplayName("회원가입 시 입력한 비밀번호는 암호화되어 입력 당시와 달라진다")
 	public void encryptPasswordSuccess()
-		throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+		throws InvocationTargetException, IllegalAccessException {
 		// 테스트 데이터 및 동작 정의
-		UserService passwordEncryptor = new UserService(userMapper);
-		Method method = passwordEncryptor.getClass().getDeclaredMethod("encryptPassword", String.class);
-		method.setAccessible(true);
-
-		String encryptedPassword = (String) method.invoke(passwordEncryptor, this.request.getPassword());
+		String encryptedPassword = (String) this.passwordEncryptMethod.invoke(
+			this.passwordEncryptor, this.request.getPassword());
 
 		User userWithEncryptedPassword = JoinUserRequest.builder()
 			.email(this.request.getEmail())
@@ -171,7 +177,8 @@ class UserServiceTest {
 		// 행위 검증
 		assertThat(encryptedPassword).isNotEqualTo(this.request.getPassword());
 		assertThat(encryptedPassword).isEqualTo(
-			(String) method.invoke(passwordEncryptor, this.request.getPassword()));
+			(String) this.passwordEncryptMethod.invoke(this.passwordEncryptor,
+				this.request.getPassword()));
 
 		verify(userMapper).insertUser(any(User.class));
 		verify(userMapper, times(2)).findUserByEmail(any(String.class));
@@ -209,11 +216,8 @@ class UserServiceTest {
 
 		String validPassword = this.request.getPassword();
 
-		UserService passwordEncryptor = new UserService(userMapper);
-		Method method = passwordEncryptor.getClass().getDeclaredMethod("encryptPassword", String.class);
-		method.setAccessible(true);
-
-		String encryptedValidPassword = (String) method.invoke(passwordEncryptor, validPassword);
+		String encryptedValidPassword = (String) this.passwordEncryptMethod.invoke(
+			this.passwordEncryptor, validPassword);
 
 		User validUser = User.builder()
 			.email(this.request.getEmail())
@@ -241,20 +245,18 @@ class UserServiceTest {
 	@Test
 	@DisplayName("로그인 성공 테스트")
 	public void loginSuccess()
-		throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+		throws InvocationTargetException, IllegalAccessException {
 		// 테스트 데이터 및 동작 정의
 		String validPassword = this.request.getPassword();
 
-		UserService passwordEncryptor = new UserService(userMapper);
-		Method method = passwordEncryptor.getClass().getDeclaredMethod("encryptPassword", String.class);
-		method.setAccessible(true);
-
-		String encryptedValidPassword = (String) method.invoke(passwordEncryptor, this.request.getPassword());
+		String encryptedValidPassword = (String) this.passwordEncryptMethod.invoke(
+			this.passwordEncryptor, this.request.getPassword());
 
 		LoginUserRequest validRequest = LoginUserRequest.builder()
 			.email(this.request.getEmail())
 			.password(validPassword)
 			.build();
+
 		User validUser = User.builder()
 			.email(this.request.getEmail())
 			.password(encryptedValidPassword)
@@ -274,5 +276,32 @@ class UserServiceTest {
 
 		// 행위 검증
 		verify(userMapper).findUserByEmail(any(String.class));
+	}
+
+	@Test
+	@DisplayName("로그아웃 실패 테스트")
+	public void logoutFail() {
+		// 테스트 데이터 및 동작 정의
+		MockHttpSession session = new MockHttpSession();
+		session.setAttribute("USER_EMAIL", null);
+
+		// 실행 및 행위 검증
+		assertThrows(NoSuchUserException.class, () -> {
+			userService.logoutUser(session);
+		});
+	}
+
+	@Test
+	@DisplayName("로그인한 사용자의 세션 정보가 있으면 로그아웃할 수 있다")
+	public void logoutSuccess() {
+		// 테스트 데이터 및 동작 정의
+		MockHttpSession session = new MockHttpSession();
+		session.setAttribute("USER_EMAIL", this.request.getEmail());
+
+		// 실행
+		userService.logoutUser(session);
+
+		// 행위 검증
+		assertThrows(IllegalStateException.class, () -> session.invalidate());
 	}
 }

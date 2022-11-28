@@ -88,6 +88,14 @@ public class UserService {
 		session.setAttribute(USER_EMAIL, request.getEmail());
 	}
 
+	public void logoutUser(HttpSession session) {
+		if (session.getAttribute(USER_EMAIL) == null) {
+			throw new NoSuchUserException("로그인한 사용자가 아닙니다");
+		}
+
+		session.invalidate();
+	}
+
 	private String encryptPassword(String password) {
 		MessageDigest digest = null;
 		try {
@@ -110,4 +118,5 @@ public class UserService {
 
 		return result.toString();
 	}
+
 }
