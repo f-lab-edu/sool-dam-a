@@ -1,13 +1,24 @@
 package com.flab.sooldama;
 
+import com.flab.sooldama.global.TestRedisConfig;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
 //@SpringBootTest 어노테이션은 통합 테스트를 제공하는 기본적인 스프링부트 테스트 어노테이션입니다.
 @ActiveProfiles("test")
-@SpringBootTest
+@SpringBootTest(classes = SoolDamAApplication.class)
+@Import(TestRedisConfig.class)
 class SoolDamAApplicationTests {
+
+	TestRedisConfig redisConfig;
+
+	@Autowired
+	public SoolDamAApplicationTests(TestRedisConfig testRedisConfig) {
+		this.redisConfig = testRedisConfig;
+	}
 
 	/*
 	@Test 어노테이션은 테스트를 수행하는 메소드라는 것을 알려줍니다.
