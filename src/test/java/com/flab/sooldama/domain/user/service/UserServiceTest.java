@@ -1,5 +1,6 @@
 package com.flab.sooldama.domain.user.service;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
@@ -92,7 +93,7 @@ class UserServiceTest {
 		JoinUserResponse joinedUserResponse = userService.findUserById(response.getId());
 
 		// 행위 검증
-		Assertions.assertThat(joinedUserResponse.getId()).isEqualTo(1L);
+		assertThat(joinedUserResponse.getId()).isEqualTo(1L);
 		verify(userMapper).insertUser(any(User.class));
 		verify(userMapper, times(2)).findUserByEmail(any(String.class));
 		verify(userMapper).findUserById(any(Long.TYPE));
@@ -168,8 +169,9 @@ class UserServiceTest {
 		userService.insertUser(request);
 
 		// 행위 검증
-		Assertions.assertThat(encryptedPassword).isNotEqualTo(this.request.getPassword());
-		Assertions.assertThat(encryptedPassword).isEqualTo((String)method.invoke(passwordEncryptor, this.request.getPassword()));
+		assertThat(encryptedPassword).isNotEqualTo(this.request.getPassword());
+		assertThat(encryptedPassword).isEqualTo(
+			(String) method.invoke(passwordEncryptor, this.request.getPassword()));
 
 		verify(userMapper).insertUser(any(User.class));
 		verify(userMapper, times(2)).findUserByEmail(any(String.class));
