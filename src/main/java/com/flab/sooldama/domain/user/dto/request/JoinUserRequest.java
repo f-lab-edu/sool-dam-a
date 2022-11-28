@@ -33,6 +33,11 @@ public class JoinUserRequest {
 	@NotNull @JsonProperty
 	private boolean isAdult;
 
+	@JsonProperty("isAdult")
+	public boolean getIsAdult() {
+		return this.isAdult;
+	}
+
 	public User toUser() {
 		return User.builder()
 			.email(this.getEmail())
@@ -40,7 +45,7 @@ public class JoinUserRequest {
 			.name(this.getName())
 			.phoneNumber(this.getPhoneNumber())
 			.nickname(this.getNickname())
-			.isAdult(this.isAdult())
+			.isAdult(getIsAdult())
 			.build();
 	}
 

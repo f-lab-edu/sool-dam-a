@@ -20,4 +20,10 @@ public class JoinUserResponse {
 	private LocalDateTime createdAt;
 	private LocalDateTime updatedAt;
 	private LocalDateTime deletedAt;
+
+	@JsonProperty("isAdult")
+	public boolean getIsAdult() {
+		return this.isAdult;
+	}
+
 }
