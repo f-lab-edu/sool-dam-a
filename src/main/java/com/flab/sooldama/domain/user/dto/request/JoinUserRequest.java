@@ -30,7 +30,7 @@ public class JoinUserRequest {
 	@NotNull
 	private String phoneNumber;
 	private String nickname;
-	@NotNull @JsonProperty
+	@NotNull
 	private boolean isAdult;
 
 	@JsonProperty("isAdult")

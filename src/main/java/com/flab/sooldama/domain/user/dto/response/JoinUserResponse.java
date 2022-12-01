@@ -15,7 +15,6 @@ public class JoinUserResponse {
 	private String name;
 	private String phoneNumber;
 	private String nickname;
-	@JsonProperty
 	private boolean isAdult;
 	private LocalDateTime createdAt;
 	private LocalDateTime updatedAt;
