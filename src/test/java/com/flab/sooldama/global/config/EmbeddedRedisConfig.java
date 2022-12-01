@@ -14,6 +14,7 @@ import org.springframework.util.StringUtils;
 @Configuration
 @PropertySource(value = "classpath:application-test.yml", factory = YamlPropertySourceFactory.class)
 public class EmbeddedRedisConfig {
+
 	@Value("${spring.redis.port}")
 	private int port;
 
@@ -21,7 +22,7 @@ public class EmbeddedRedisConfig {
 
 	@PostConstruct
 	public void redisServer() throws IOException {
-		int redisPort = isRedisRunning()? findAvailablePort() : port;
+		int redisPort = isRedisRunning() ? findAvailablePort() : port;
 		redisServer = new RedisServer(redisPort);
 		redisServer.start();
 	}
@@ -59,7 +60,8 @@ public class EmbeddedRedisConfig {
 		String line;
 		StringBuilder pidInfo = new StringBuilder();
 
-		try (BufferedReader input = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+		try (BufferedReader input = new BufferedReader(
+			new InputStreamReader(process.getInputStream()))) {
 
 			while ((line = input.readLine()) != null) {
 				pidInfo.append(line);

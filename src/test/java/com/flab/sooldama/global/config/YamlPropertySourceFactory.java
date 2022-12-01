@@ -16,7 +16,8 @@ public class YamlPropertySourceFactory implements PropertySourceFactory {
 	public PropertySource<?> createPropertySource(@Nullable String name, EncodedResource resource) {
 		Properties yamlProperties = loadYamlProperties(resource);
 		String sourceName = StringUtils.hasText(name) ? name : resource.getResource().getFilename();
-		return new PropertiesPropertySource(Objects.requireNonNull(sourceName), Objects.requireNonNull(yamlProperties));
+		return new PropertiesPropertySource(Objects.requireNonNull(sourceName),
+			Objects.requireNonNull(yamlProperties));
 	}
 
 	private Properties loadYamlProperties(EncodedResource resource) {
