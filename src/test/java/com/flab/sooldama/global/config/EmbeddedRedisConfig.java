@@ -57,19 +57,22 @@ public class EmbeddedRedisConfig {
 	}
 
 	private boolean isRunning(Process process) {
-		String line;
 		StringBuilder pidInfo = new StringBuilder();
 
-		try (BufferedReader input = new BufferedReader(
-			new InputStreamReader(process.getInputStream()))) {
+		try (BufferedReader input = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
 
-			while ((line = input.readLine()) != null) {
-				pidInfo.append(line);
-			}
+			getPidInfo(pidInfo, input);
 
 		} catch (Exception e) {
 		}
 
 		return StringUtils.hasText(pidInfo.toString());
+	}
+
+	private void getPidInfo(StringBuilder pidInfo, BufferedReader input) throws IOException {
+		String line;
+		while ((line = input.readLine()) != null) {
+			pidInfo.append(line);
+		}
 	}
 }
