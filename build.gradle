@@ -62,7 +62,8 @@ jacocoTestCoverageVerification {
 			excludes = [
 					'com.flab.sooldama.domain.**.dto.*',
 					'com.flab.sooldama.domain.**.domain.*',
-					'com.flab.sooldama.global.config.*'
+					'com.flab.sooldama.global.config.*',
+					'com.flab.sooldama.SoolDamAApplication'
 			]
 
 			limit { // rule 에 대한 제한을 설정합니다.
