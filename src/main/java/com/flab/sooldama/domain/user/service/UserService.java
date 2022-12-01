@@ -36,7 +36,7 @@ public class UserService {
 			.name(request.getName())
 			.phoneNumber(request.getPhoneNumber())
 			.nickname(request.getNickname())
-			.isAdult(request.isAdult())
+			.isAdult(request.getIsAdult())
 			.build()
 			.toUser();
 
