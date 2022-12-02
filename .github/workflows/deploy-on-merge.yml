@@ -1,0 +1,98 @@
+name: scp files
+on: [ push ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build with Gradle
+        run: ./gradlew clean build
+      - name: check artifact file
+        run: ls -ahl ./build/libs/*.jar
+      - name: upload build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: project_artifact
+          path: "./build/libs/*.jar"
+      - name: upload deploy script
+        uses: actions/upload-artifact@v3
+        with:
+          name: project_deploy_script
+          path: "./.github/workflows/*.sh"
+  distribute:
+    needs: [ build ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: create temporary directory
+        run: mkdir ~/distribute
+      - name: download deploy script
+        uses: actions/download-artifact@v3
+        with:
+          name: project_deploy_script
+          path: distribute
+      - name: download build artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: project_artifact
+          path: distribute
+      - name: check artifact and script downloaded
+        run: |
+          ls -alh distribute
+      - name: transfer artifact and script via ssh password
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          rm: true
+          source: "distribute/*.jar, distribute/*.sh"
+          target: ${{ secrets.DIR_PATH }}
+          ## 작업에 사용한 distrubute 디렉토리를 경로에서 제거
+          strip_components: 1
+      - name: Show structure of transfer files
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          port: ${{ secrets.PORT }}
+          password: ${{ secrets.PASSWORD }}
+          script: |
+            cd ${{ secrets.DIR_PATH }}
+            ls -alh
+  service_restart:
+    needs: [ build, distribute ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: stop if running
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          port: ${{ secrets.PORT }}
+          password: ${{ secrets.PASSWORD }}
+          script: |
+            cd ${{ secrets.DIR_PATH }}
+            sh stop_if_running.sh
+      - name: restart service
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          port: ${{ secrets.PORT }}
+          password: ${{ secrets.PASSWORD }}
+          script: |
+            cd ${{ secrets.DIR_PATH }}
+            echo ">>>> $JAR_PATH java execute."
+            nohup java -jar sooldama-0.0.1-SNAPSHOT.jar --spring.profiles.active=dev \
+            ${{ secrets.SERVER_MYSQL_URL }} ${{ secrets.SERVER_MYSQL_PORT }} \
+            ${{ secrets.SERVER_MYSQL_DBNAME }} ${{ secrets.SERVER_MYSQL_PASSWORD }} \
+            ${{ secrets.SERVER_MYSQL_USERNAME }} > /dev/null 2> /dev/null < /dev/null &
+            sleep 5
