@@ -69,3 +69,7 @@ jacocoTestCoverageVerification {
 		}
 	}
 }
+
+jar {
+	enabled = false
+}
