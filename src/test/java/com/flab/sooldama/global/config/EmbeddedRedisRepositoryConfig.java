@@ -9,6 +9,12 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.test.context.ActiveProfiles;
 
+/*
+@EnableRedisRepositories
+@EnableRedisRepositories는 redis를 repository로 이용할 수 있도록 설정합니다. 그러면 객체 형태의 데이터를 변환하고
+redis hash에 저장할 수 있습니다.
+ */
+
 @Configuration
 @ActiveProfiles("test")
 @EnableRedisRepositories
