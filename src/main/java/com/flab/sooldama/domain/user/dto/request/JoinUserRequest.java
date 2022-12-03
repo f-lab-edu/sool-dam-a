@@ -1,5 +1,6 @@
 package com.flab.sooldama.domain.user.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.flab.sooldama.domain.user.domain.User;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -32,6 +33,11 @@ public class JoinUserRequest {
 	@NotNull
 	private boolean isAdult;
 
+	@JsonProperty("isAdult")
+	public boolean getIsAdult() {
+		return this.isAdult;
+	}
+
 	public User toUser() {
 		return User.builder()
 			.email(this.getEmail())
@@ -39,7 +45,7 @@ public class JoinUserRequest {
 			.name(this.getName())
 			.phoneNumber(this.getPhoneNumber())
 			.nickname(this.getNickname())
-			.isAdult(this.isAdult())
+			.isAdult(this.getIsAdult())
 			.build();
 	}
 

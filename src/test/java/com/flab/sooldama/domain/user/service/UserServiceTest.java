@@ -79,7 +79,7 @@ class UserServiceTest {
 			.name(this.request.getName())
 			.phoneNumber(this.request.getPhoneNumber())
 			.nickname(this.request.getNickname())
-			.isAdult(this.request.isAdult())
+			.isAdult(this.request.getIsAdult())
 			.createdAt(LocalDateTime.now())
 			.build();
 
@@ -154,7 +154,7 @@ class UserServiceTest {
 			.name(this.request.getName())
 			.phoneNumber(this.request.getPhoneNumber())
 			.nickname(this.request.getNickname())
-			.isAdult(this.request.isAdult())
+			.isAdult(this.request.getIsAdult())
 			.build()
 			.toUser();
 
@@ -225,7 +225,7 @@ class UserServiceTest {
 			.name(this.request.getName())
 			.phoneNumber(this.request.getPhoneNumber())
 			.nickname(this.request.getNickname())
-			.isAdult(this.request.isAdult())
+			.isAdult(this.request.getIsAdult())
 			.createdAt(LocalDateTime.now())
 			.build();
 
@@ -263,7 +263,7 @@ class UserServiceTest {
 			.name(this.request.getName())
 			.phoneNumber(this.request.getPhoneNumber())
 			.nickname(this.request.getNickname())
-			.isAdult(this.request.isAdult())
+			.isAdult(this.request.getIsAdult())
 			.createdAt(LocalDateTime.now())
 			.build();
 
