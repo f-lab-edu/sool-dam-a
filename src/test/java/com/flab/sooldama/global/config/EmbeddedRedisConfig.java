@@ -7,12 +7,12 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.test.context.ActiveProfiles;
 import redis.embedded.RedisServer;
 import org.springframework.util.StringUtils;
 
 @Configuration
-@PropertySource(value = "classpath:application-test.yml", factory = YamlPropertySourceFactory.class)
+@ActiveProfiles("test")
 public class EmbeddedRedisConfig {
 
 	@Value("${spring.redis.port}")
