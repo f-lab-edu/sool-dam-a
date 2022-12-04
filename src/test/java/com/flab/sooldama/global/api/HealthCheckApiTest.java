@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(controllers = HealthCheckApi.class)
 class HealthCheckApiTest {
+
 	@Autowired
 	MockMvc mockMvc;
 
