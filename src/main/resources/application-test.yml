@@ -15,7 +15,7 @@ spring:
   sql:
     init:
       platform: h2
-      mode: always
+      mode: embedded
       schema-locations: classpath:/schema.sql
       data-locations: classpath:/data.sql
   redis:
