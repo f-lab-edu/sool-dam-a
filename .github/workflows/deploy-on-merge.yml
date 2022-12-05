@@ -2,7 +2,7 @@ name: scp files
 on: [ push ]
 
 jobs:
-  build:
+  upload_files :
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -30,7 +30,7 @@ jobs:
           path: "./.github/workflows/*.sh"
 
   distribute:
-    needs: [ build ]
+    needs: [ upload_files ]
     runs-on: ubuntu-latest
     steps:
       - name: create temporary directory
@@ -70,7 +70,7 @@ jobs:
           rm: true
           source: "distribute/*.jar, distribute/*.sh"
           target: ${{ secrets.DIR_PATH }}
-          # 작업에 사용한 distrubute 디렉토리를 경로에서 제거
+          ## 작업에 사용한 distrubute 디렉토리를 경로에서 제거
           strip_components: 1
       - name: Show structure of transfer files
         uses: appleboy/ssh-action@master
@@ -83,8 +83,8 @@ jobs:
             cd ${{ secrets.DIR_PATH }}
             ls -alh
 
-  stop_if_running:
-    needs: [ build, distribute ]
+  stop_running_service:
+    needs: [ upload_files, distribute ]
     runs-on: ubuntu-latest
     steps:
       - name: stop if running
@@ -99,7 +99,7 @@ jobs:
             sh stop_if_running.sh
 
   service_restart_server1:
-    needs: [ stop_if_running ]
+    needs: [ stop_running_service ]
     runs-on: ubuntu-latest
     steps:
       - name: restart service in server 1
@@ -123,7 +123,7 @@ jobs:
             sleep 5
 
   service_restart_server2:
-    needs: [ stop_if_running ]
+    needs: [ stop_running_service ]
     runs-on: ubuntu-latest
     steps:
       - name: restart service in server 2
