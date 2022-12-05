@@ -1,5 +1,7 @@
 name: continuous delivery
-on: [ push ]
+on:
+  push:
+    branches: [ main ]
 
 jobs:
   upload_files :
