@@ -28,3 +28,6 @@
 
 ## ERD
 ![sool-dam-a-erd](https://user-images.githubusercontent.com/30012466/205615762-11f3cd6d-41d4-4360-b5b8-299c7f17ff87.png)
+
+## 프로젝트 구조도
+![sooldama-project-structure3](https://user-images.githubusercontent.com/30012466/205631699-cfca03e8-6750-4821-871a-72c0f68ee88c.png)
