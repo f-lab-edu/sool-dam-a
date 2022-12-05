@@ -2,8 +2,11 @@ spring:
   config:
     activate:
       on-profile: dev
+  session:
+    store-type: redis
   redis:
     host: ${SERVER_REDIS_HOST}
+    port: 6379
   datasource:
     url: jdbc:mysql://${SERVER_MYSQL_URL}:${SERVER_MYSQL_PORT}/${SERVER_MYSQL_DBNAME}?serverTimezone=UTC&characterEncoding=UTF-8
     username: ${SERVER_MYSQL_USERNAME}
