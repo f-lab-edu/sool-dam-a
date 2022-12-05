@@ -98,5 +98,5 @@ jobs:
             nohup java -jar sooldama-0.0.1-SNAPSHOT.jar --spring.profiles.active=dev \
             --SERVER_MYSQL_URL=${{ secrets.SERVER_MYSQL_URL }} --SERVER_MYSQL_PORT=${{ secrets.SERVER_MYSQL_PORT }} \
             --SERVER_MYSQL_DBNAME=${{ secrets.SERVER_MYSQL_DBNAME }} --SERVER_MYSQL_USERNAME=${{ secrets.SERVER_MYSQL_USERNAME }} \
-            --SERVER_MYSQL_PASSWORD=${{ secrets.SERVER_MYSQL_PASSWORD }} > /dev/null 2> /dev/null < /dev/null &
+            --SERVER_MYSQL_PASSWORD=${{ secrets.SERVER_MYSQL_PASSWORD }} --SERVER_REDIS_HOST=${{ secrets.REDIS_HOST }} > /dev/null 2> /dev/null < /dev/null &
             sleep 5
