@@ -48,13 +48,25 @@ jobs:
       - name: check artifact and script downloaded
         run: |
           ls -alh distribute
-      - name: transfer artifact and script via ssh password
+      - name: transfer artifact and script to server1
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
+          rm: true
+          source: "distribute/*.jar, distribute/*.sh"
+          target: ${{ secrets.DIR_PATH }}
+          ## 작업에 사용한 distrubute 디렉토리를 경로에서 제거
+          strip_components: 1
+      - name: transfer artifact and script to server2
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT2 }}
           rm: true
           source: "distribute/*.jar, distribute/*.sh"
           target: ${{ secrets.DIR_PATH }}
