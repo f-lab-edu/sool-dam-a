@@ -83,20 +83,25 @@ jobs:
             cd ${{ secrets.DIR_PATH }}
             ls -alh
 
-  service_restart:
+  stop_if_running:
     needs: [ build, distribute ]
     runs-on: ubuntu-latest
     steps:
       - name: stop if running
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.HOST }}
+          host: ${{ secrets.HOSTS }}
           username: ${{ secrets.USERNAME }}
           port: ${{ secrets.PORT }}
           password: ${{ secrets.PASSWORD }}
           script: |
             cd ${{ secrets.DIR_PATH }}
             sh stop_if_running.sh
+
+  service_restart:
+    needs: [ stop_if_running ]
+    runs-on: ubuntu-latest
+    steps:
       - name: restart service
         uses: appleboy/ssh-action@master
         with:
