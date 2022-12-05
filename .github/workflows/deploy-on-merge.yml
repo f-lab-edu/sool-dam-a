@@ -1,4 +1,4 @@
-name: scp files
+name: continuous delivery
 on: [ push ]
 
 jobs:
@@ -12,9 +12,9 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: gradle
-      - name: Grant execute permission for gradlew
+      - name: grant execute permission for gradlew
         run: chmod +x gradlew
-      - name: Build with Gradle
+      - name: build with gradle
         run: ./gradlew clean build
       - name: check artifact file
         run: ls -ahl ./build/libs/*.jar
@@ -72,7 +72,7 @@ jobs:
           target: ${{ secrets.DIR_PATH }}
           ## 작업에 사용한 distrubute 디렉토리를 경로에서 제거
           strip_components: 1
-      - name: Show structure of transfer files
+      - name: show structure of transfered files
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
@@ -87,7 +87,7 @@ jobs:
     needs: [ upload_files, distribute ]
     runs-on: ubuntu-latest
     steps:
-      - name: stop if running
+      - name: stop running service
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOSTS }}
