@@ -75,11 +75,22 @@ public class ProductApiTest {
 	}
 
 	@Test
-	@DisplayName("제품 조회 성공 테스트")
+	@DisplayName("한 번에 여러 제품 조회 시 기본값 적용")
 	public void getProductsTest() throws Exception {
+		// 테스트 데이터 및 동작 정의
+		when(productService.getProducts(0, 20, null))
+			.thenReturn(this.products);
+
+		// 실행
 		this.mockMvc
-			.perform(get("/products"))
+			.perform(get("/products")
+				.param("offset", "0")
+				.param("limit", "20"))
 			.andExpect(status().isOk());
+
+		// 행위 검증
+		verify(productService, times(1))
+			.getProducts(0, 20, null);
 	}
 
 	@Test
