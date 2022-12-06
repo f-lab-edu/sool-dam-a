@@ -28,6 +28,9 @@ public class ProductApiTest {
 	@Autowired
 	MockMvc mockMvc;
 
+	@InjectMocks
+	ProductApi productApi;
+
 	@MockBean
 	ProductService productService;
 
