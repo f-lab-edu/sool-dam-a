@@ -78,29 +78,34 @@ public class ProductApiTest {
 	@DisplayName("한 번에 여러 제품 조회 시 기본값 적용")
 	public void getProductsTest() throws Exception {
 		// 테스트 데이터 및 동작 정의
-		when(productService.getProducts(0, 20, null))
+		Integer DEFAULT_OFFSET = 0;
+		Integer DEFAULT_LIMIT = 20;
+		Long DEFAULT_CATEGORY_ID = null;
+		when(productService.getProducts(DEFAULT_OFFSET, DEFAULT_LIMIT, DEFAULT_CATEGORY_ID))
 			.thenReturn(this.products);
 
 		// 실행
 		this.mockMvc
 			.perform(get("/products")
-				.param("offset", "0")
-				.param("limit", "20"))
+				.param("offset", DEFAULT_OFFSET.toString())
+				.param("limit", DEFAULT_LIMIT.toString()))
 			.andExpect(status().isOk());
 
 		// 행위 검증
 		verify(productService, times(1))
-			.getProducts(0, 20, null);
+			.getProducts(DEFAULT_OFFSET, DEFAULT_LIMIT, DEFAULT_CATEGORY_ID);
 	}
 
 	@Test
 	@DisplayName("offset이 0보다 작으면 유효성 검증 실패해서 service로 요청 전달 X")
 	public void getProductsFailTest() throws Exception {
+		Integer INVALID_OFFSET = -1;
+		Integer DEFAULT_LIMIT = 20;
 
 		this.mockMvc
 			.perform(get("/products")
-				.param("offset", "-1")
-				.param("limit", "20"))
+				.param("offset", INVALID_OFFSET.toString())
+				.param("limit", DEFAULT_LIMIT.toString()))
 			.andDo(print())
 			.andExpect(status().isBadRequest());
 	}
