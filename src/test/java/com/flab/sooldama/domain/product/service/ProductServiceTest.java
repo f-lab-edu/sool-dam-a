@@ -33,7 +33,8 @@ public class ProductServiceTest {
 	@InjectMocks(Service) @Mock(DAO) 를 활용하여 Service 테스트 목객체에 DAO 목객체를 주입시킵니다.
 	 */
 	@InjectMocks
-	ProductService productService;
+	private ProductService productService;
+
 	@Mock
 	private ProductMapper productMapper;
 
