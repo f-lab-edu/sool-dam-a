@@ -51,6 +51,7 @@ public class UserApiTest {
 
 	@Autowired
 	MockMvc mockMvc;
+
 	@Autowired
 	private ObjectMapper objectMapper;
 
@@ -95,6 +96,7 @@ public class UserApiTest {
 				.password("1q2w3e4r!")
 				.name("younghee lee")
 				.build());
+
 		//Then 회원가입 api에 content를 넣고 호출했을 때
 		mockMvc.perform(post("/users")
 				.content(content)
