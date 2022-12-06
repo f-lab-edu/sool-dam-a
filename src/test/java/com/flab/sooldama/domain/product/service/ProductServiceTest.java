@@ -58,6 +58,7 @@ public class ProductServiceTest {
 					.capacity(350)
 					.build());
 		}
+
 		when(productMapper.selectProducts(offset, limit, null)).thenReturn(products);
 
 		// when
@@ -110,6 +111,7 @@ public class ProductServiceTest {
 					.capacity(350)
 					.build());
 		}
+
 		when(productMapper.selectProducts(offset, limit, categoryId))
 			.thenReturn(products);
 
@@ -186,6 +188,7 @@ public class ProductServiceTest {
 
         // then
         assertThrows(ProductNotFoundException.class,
+
         // when
 			()-> productService.getProductById(productId));
     }
