@@ -123,4 +123,22 @@ public class ProductApiTest {
 		verify(productService, times(1)).getProductById(PRODUCT_ID);
 	}
 
+	@Test
+	@DisplayName("존재하지 않는 제품 아이디로 제품 조회 시 실패")
+	public void getProductByNonExistingId() throws Exception {
+		// 테스트 데이터 및 동작 정의
+		Long NONEXISTING_ID = -1L;
+
+		doThrow(ProductNotFoundException.class).when(productService)
+			.getProductById(NONEXISTING_ID);
+
+		// 실행
+		this.mockMvc
+			.perform(get("/products/{NONEXISTING_ID}", NONEXISTING_ID))
+			.andDo(print())
+			.andExpect(status().isNotFound());
+
+		// 행위 검증
+		verify(productService, times(1)).getProductById(NONEXISTING_ID);
+	}
 }
