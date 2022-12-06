@@ -94,10 +94,14 @@ public class ProductApiTest {
 	}
 
 	@Test
-	@DisplayName("offset이 0 이하일 때 제품 조회 실패 테스트")
+	@DisplayName("offset이 0보다 작으면 유효성 검증 실패해서 service로 요청 전달 X")
 	public void getProductsFailTest() throws Exception {
+
 		this.mockMvc
-			.perform(get("/products?offset=-1"))
+			.perform(get("/products")
+				.param("offset", "-1")
+				.param("limit", "20"))
+			.andDo(print())
 			.andExpect(status().isBadRequest());
 	}
 
