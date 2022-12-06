@@ -105,11 +105,22 @@ public class ProductApiTest {
 			.andExpect(status().isBadRequest());
 	}
 
-    @Test
-    @DisplayName("아이디로 제품 조회 성공 테스트")
-    public void getProductTest() throws Exception {
-        this.mockMvc
-			.perform(get("/products/1"))
+	@Test
+	@DisplayName("아이디로 제품 조회 성공 테스트")
+	public void getProductTest() throws Exception {
+		// 테스트 데이터 및 동작 정의
+		Long PRODUCT_ID = 1L;
+
+		when(productService.getProductById(PRODUCT_ID)).thenReturn(this.products.get(0));
+
+		// 실행
+		this.mockMvc
+			.perform(get("/products/{PRODUCT_ID}", PRODUCT_ID))
+			.andDo(print())
 			.andExpect(status().isOk());
-    }
+
+		// 행위 검증
+		verify(productService, times(1)).getProductById(PRODUCT_ID);
+	}
+
 }
