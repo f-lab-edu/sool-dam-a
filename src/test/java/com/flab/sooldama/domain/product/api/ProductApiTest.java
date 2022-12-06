@@ -36,6 +36,12 @@ public class ProductApiTest {
 
 	private List<ProductResponse> products;
 
+	private static final Integer DEFAULT_OFFSET = 0;
+
+	private static final Integer DEFAULT_LIMIT = 20;
+
+	private static final Long DEFAULT_CATEGORY_ID = null;
+
 	@BeforeEach
 	public void setUp() {
 		ProductResponse product1 = ProductResponse.builder()
@@ -78,9 +84,6 @@ public class ProductApiTest {
 	@DisplayName("한 번에 여러 제품 조회 시 기본값 적용")
 	public void getProductsTest() throws Exception {
 		// 테스트 데이터 및 동작 정의
-		Integer DEFAULT_OFFSET = 0;
-		Integer DEFAULT_LIMIT = 20;
-		Long DEFAULT_CATEGORY_ID = null;
 		when(productService.getProducts(DEFAULT_OFFSET, DEFAULT_LIMIT, DEFAULT_CATEGORY_ID))
 			.thenReturn(this.products);
 
@@ -100,7 +103,6 @@ public class ProductApiTest {
 	@DisplayName("offset이 0보다 작으면 유효성 검증 실패해서 service로 요청 전달 X")
 	public void getProductsFailTest() throws Exception {
 		Integer INVALID_OFFSET = -1;
-		Integer DEFAULT_LIMIT = 20;
 
 		this.mockMvc
 			.perform(get("/products")
