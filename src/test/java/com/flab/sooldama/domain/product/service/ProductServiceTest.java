@@ -3,7 +3,6 @@ package com.flab.sooldama.domain.product.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
@@ -18,13 +17,14 @@ import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.ActiveProfiles;
 
 @ActiveProfiles("test")
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class ProductServiceTest {
 
 	/*
@@ -33,7 +33,8 @@ public class ProductServiceTest {
 	@InjectMocks(Service) @Mock(DAO) 를 활용하여 Service 테스트 목객체에 DAO 목객체를 주입시킵니다.
 	 */
 	@InjectMocks
-	ProductService productService;
+	private ProductService productService;
+
 	@Mock
 	private ProductMapper productMapper;
 
@@ -58,6 +59,7 @@ public class ProductServiceTest {
 					.capacity(350)
 					.build());
 		}
+
 		when(productMapper.selectProducts(offset, limit, null)).thenReturn(products);
 
 		// when
@@ -110,6 +112,7 @@ public class ProductServiceTest {
 					.capacity(350)
 					.build());
 		}
+
 		when(productMapper.selectProducts(offset, limit, categoryId))
 			.thenReturn(products);
 
@@ -127,34 +130,34 @@ public class ProductServiceTest {
 		}
 	}
 
-    @Test
-    @DisplayName("카테고리별 제품이 존재하지 않을 때 조회 성공 테스트 - 비어있는 리스트를 반환")
-    public void getProductsByCategoryIdEmptyTest() {
+	@Test
+	@DisplayName("카테고리별 제품이 존재하지 않을 때 조회 성공 테스트 - 비어있는 리스트를 반환")
+	public void getProductsByCategoryIdEmptyTest() {
 
-        // given
-        int offset = 0;
-        int limit = 5;
-        long categoryId = 1L;
+		// given
+		int offset = 0;
+		int limit = 5;
+		long categoryId = 1L;
 
-        List<Product> products = new ArrayList<>();
-        when(productMapper.selectProducts(offset, limit, categoryId)).thenReturn(products);
+		List<Product> products = new ArrayList<>();
+		when(productMapper.selectProducts(offset, limit, categoryId)).thenReturn(products);
 
-        // when
-        List<ProductResponse> productsResponse =
+		// when
+		List<ProductResponse> productsResponse =
 			productService.getProducts(offset, limit, categoryId);
 
-        // then
-        verify(productMapper).selectProducts(offset, limit, categoryId);
-        assertTrue(productsResponse.isEmpty());
+		// then
+		verify(productMapper).selectProducts(offset, limit, categoryId);
+		assertTrue(productsResponse.isEmpty());
 	}
 
-    @Test
-    @DisplayName("아이디로 제품 조회 성공 테스트")
-    public void getProductByIdTest() {
+	@Test
+	@DisplayName("아이디로 제품 조회 성공 테스트")
+	public void getProductByIdTest() {
 
-        // given
-        long productId = 1L;
-        Product product = Product.builder()
+		// given
+		long productId = 1L;
+		Product product = Product.builder()
 			.id(productId)
 			.productCategoryId(1L)
 			.name("test")
@@ -165,28 +168,29 @@ public class ProductServiceTest {
 			.capacity(350)
 			.build();
 
-        when(productMapper.selectProductById(productId)).thenReturn(Optional.ofNullable(product));
+		when(productMapper.selectProductById(productId)).thenReturn(Optional.ofNullable(product));
 
-        // when
-        ProductResponse productResponse = productService.getProductById(productId);
+		// when
+		ProductResponse productResponse = productService.getProductById(productId);
 
-        // then
-        verify(productMapper).selectProductById(productId);
-        assertNotNull(productResponse);
-        assertEquals(productId, productResponse.getId());
-    }
+		// then
+		verify(productMapper).selectProductById(productId);
+		assertNotNull(productResponse);
+		assertEquals(productId, productResponse.getId());
+	}
 
-    @Test
-    @DisplayName("아이디로 존재하지 않는 제품 조회 테스트")
-    public void getProductByIdFailTest() {
+	@Test
+	@DisplayName("아이디로 존재하지 않는 제품 조회 테스트")
+	public void getProductByIdFailTest() {
 
-        // given
-        long productId = 1L;
-        when(productMapper.selectProductById(productId)).thenReturn(Optional.empty());
+		// given
+		long productId = 1L;
+		when(productMapper.selectProductById(productId)).thenReturn(Optional.empty());
 
-        // then
-        assertThrows(ProductNotFoundException.class,
-        // when
-			()-> productService.getProductById(productId));
-    }
+		// then
+		assertThrows(ProductNotFoundException.class,
+
+			// when
+			() -> productService.getProductById(productId));
+	}
 }
